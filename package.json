@@ -1,5 +1,5 @@
 {
-  "name": "juicios",
+  "name": "observatorio",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -19,14 +19,5 @@
     "pdfjs": "^2.4.2",
     "uuid": "^8.3.2",
     "uuidv4": "^6.2.6"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ProductiveBrains/juicios.git"
-  },
-  "bugs": {
-    "url": "https://github.com/ProductiveBrains/juicios/issues"
-  },
-  "homepage": "https://github.com/ProductiveBrains/juicios#readme",
-  "description": ""
+  }
 }
