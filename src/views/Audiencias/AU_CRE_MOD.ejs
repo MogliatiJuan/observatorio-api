@@ -1,0 +1,129 @@
+<!-- MODAL -->
+<div id="id_Modal_CD_AU_CREATE" class="modal fade cl_modal_CD_AU_CREATE" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width: 90%!important;margin-top:2px!important;" role="document">
+        <div class="modal-content caja">
+
+            <form id="idMiFormulario_AU_CREATE" name="myForm">
+
+                <!-- HEADER -->
+                <div class="PB_MODAL_HEADER PB_BG_ALTA">
+
+                    <h5 style="margin:0;color: rgb(255, 255, 255)"><i class="fas fa-handshake"></i> ALTA AUDIENCIA -
+                        C.U.I.L. :
+                        <span class="demo-class-cuil" id="cuilpersona_AU_CRE">xxx</span> - <span
+                            class="demo-class-apenom">yyy</span>
+
+                    </h5>
+                </div>
+                <br>
+
+                <!-- BODY -->
+                <div class="PB_MODAL_BODY  card-content">
+                    <div class="container">
+                        <div class="row" style="flex-wrap:wrap;">
+                            <div class="col s12 m6 l6 x6">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2" hidden>
+                                        <i class="material-icons prefix text-danger">flag</i> <label for="idDataBase_AU_CRE">ID</label>
+                                        <input type="text" class="form-control" id="idDataBase_AU_CRE">
+                                    </div>
+
+                                    <div class="form-group col-md-5" hidden>
+                                        <i class="material-icons prefix text-danger">today</i> <label for="idFechaSistema_AU_CRE">Ingresado en Sistema</label>
+                                        <input type="date" class="form-control" id="idFechaSistema_AU_CRE">
+                                    </div>
+
+                                    <div class="form-group col-md-5">
+                                        <i class="material-icons prefix text-success">today</i> <label for="idFechaEmision_AU_CRE">Fecha Emision</label>
+                                        <input id="idFechaEmision_AU_CRE" name="idFechaEmision_AU_CRE" type="date" class="form-control validate" required="" aria-required="true">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <i class="material-icons prefix text-warning">mode_edit</i> <label for="idTipo_AU_CRE">Tipo Audiencia</label>
+
+                                        <select id="idTipo_AU_CRE" class="form-select form-control validate"
+                                            aria-label="Default select example">
+                                            <option value="1" selected>Presencial</option>
+                                            <option value="2">Virtual</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <i class="material-icons prefix text-success">today</i> <label for="idFechaAudiencia_AU_CRE">Fecha Audiencia</label>
+                                        <input id="idFechaAudiencia_AU_CRE" name="idFechaAudiencia_AU_CRE" type="date" class="form-control validate" required="" aria-required="true">
+                                    </div>
+
+
+                                    <div class="form-group col-md-3">
+                                        <i class="material-icons prefix text-warning">mode_edit</i> <label for="idComentario_AU_lugar">Hora </label>
+                                        <input id="timepicker" id="hora" name="hora" class="form-control validate" required="" aria-required="true" />
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <i class="material-icons prefix text-warning">mode_edit</i> <label for="idComentario_AU_CRE">Comentario</label>
+                                        <textarea id="idComentario_AU_CRE" name="idComentario_AU_CRE" class="form-control" rows="4" placeholder="En Caso de Audiencia Presencial Especifique Ciudad y Lugar"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <i class="material-icons prefix text-warning">cloud</i> <label for="idCartellone_AU_CRE">Cartellone Cloud <span style="font-size: 12px;color:rgb(12, 9, 211)">(Ingrese el link de sus hosting en la nube)</span> </label>
+                                        <input type="text" class="form-control" id="idCartellone_AU_CRE" name="idCartellone_AU_CRE">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col s12 m6 l6 x6">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <div class="card">
+
+                                            <div class="card-image">
+                                                <div id="PDF_AUDIENCIA_CREATE" class=""></div>
+                                                <span class="pb_card-title" onclick="fullscreenFUNCTION(document.getElementById('PDF_AUDIENCIA_CREATE'))">Vista Maximizada &nbsp</span>
+                                            </div>
+
+                                            <div class="card-content" style="margin-top:10px;">
+                                                <div class="">
+                                                    <input type="file"
+                                                        onchange="file_changed_PDFViewer('PDF_AUDIENCIA_CREATE')"
+                                                        name="archivoupload" id="id_file_pdf_AU_CRE" accept=".pdf,.jpg"
+                                                        class="validate" required="" aria-required="true">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="PB_MODAL_FOOTER d-flex align-items-center justify-content-end"
+                    style="text-align: right;background-color: #212121;height:55px;border-radius: 0 0 10px 10px ;">
+                    
+                    <a class="btn pb-btnFooter" id="botonGrabar_AU_CRE" type="submit"
+                        style="background-color: #880E4F;color:white">
+                        <i class="material-icons right pbicon1">save</i>Grabar
+                    </a>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        style="background-color: #0D47A1;color:white;margin-left:10px;">
+                        <i class="material-icons right  pbicon1">cancel</i>
+                        CERRAR
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

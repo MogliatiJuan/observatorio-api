@@ -1,0 +1,310 @@
+<!-- MODAL -->
+<div id="id_Modal_CD_RE_UPDATE" class="modal fade cl_modal_CD_RE_UPDATE" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width: 90%!important;margin-top:2px!important;" role="document">
+        <div class="modal-content caja">
+            <!-- <form action="/test1recibo" method="POST" enctype="multipart/form-data" id="myForm"> -->
+            <form id="idMiFormularioUpdate" name="myForm">
+                <div class="modal-header-Actualizar-pb pb-bg-Actualizar pb-CardHeader">
+                    <h5 style="margin:0;color: rgb(255, 255, 255)"><i class="fas fa-file-download"></i> ACTUALIZAR CARTA DOCUMENTO - RECIBIDA - C.U.I.L. :
+                        <span class="demo-class-cuil" id="cuilpersona">xxx</span> - <span
+                            class="demo-class-apenom">yyy</span>
+                    </h5>
+                </div>
+                <br>
+                <div class="modal-body-Actualizar-pb  card-content">
+                    <div class="container">
+                        <div class="row" style="flex-wrap:wrap;">
+                            <div class="col s12 m6 l6 x6">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <i class="material-icons prefix text-danger">flag</i>
+                                        <label for="id_Update_DataBase">ID</label>
+                                        <input type="text" class="form-control validate" required="" aria-required="true" name="id_Update_DataBase" id="id_Update_DataBase" disabled>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <i class="material-icons prefix text-danger">today</i>
+                                        <label for="id_Update_FechaSistema">Ingresado en Sistema</label>
+                                        <input type="date" class="form-control" id="id_Update_FechaSistema" disabled>
+                                    </div>
+
+                                    <div class="form-group col-md-5">
+                                        <i class="material-icons prefix text-success">today</i>
+                                        <label for="id_Update_FechaEmision">Fecha Emision</label>
+                                        <input id="id_Update_FechaEmision" name="id_Update_FechaEmision" type="date"
+                                            class="form-control validate" required="" aria-required="true">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                        <i class="material-icons prefix text-success">event_note</i>
+                                        <label for="id_Update_TipoReclamo">Tipo de Reclamo</label>
+                                        <input id="id_Update_TipoReclamo" name="id_Update_TipoReclamo" type="text"
+                                            class="form-control validate" required="" aria-required="true">
+                                    </div>
+                                    <div class="form-group col-md-7">
+                                        <i class="material-icons prefix text-success">event_note</i>
+                                        <label for="id_Update_EstudioJuridico">Estudio Juridico</label>
+                                        <input id="id_Update_EstudioJuridico" name="id_Update_EstudioJuridico"
+                                            type="text" class="form-control validate" required="" aria-required="true">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <i class="material-icons prefix text-warning">mode_edit</i>
+                                        <label for="id_Update_Comentario">Comentario</label>
+                                        <textarea id="id_Update_Comentario" name="id_Update_Comentario"
+                                            class="form-control" rows="4"
+                                            placeholder="Descripcion detallada optativa"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <i class="material-icons prefix text-warning">cloud</i>
+                                        <label for="id_Update_Cartellone">Cartellone Cloud
+                                            <span style="font-size: 12px;color:rgb(12, 9, 211)">(Ingrese el link de
+                                                sus hosting en la nube)</span> </label>
+                                        <input type="text" class="form-control" id="id_Update_Cartellone"
+                                            name="id_Update_Cartellone">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col s12 m6 l6 x6">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <div class="card">
+                                            <div class="card-image">
+                                                <div id="PDF_RECIBIDAS_UPDATE" class=""></div>
+                                                <span class="pb_card-title"
+                                                    onclick="fullscreenFUNCTION(document.getElementById('PDF_RECIBIDAS_UPDATE'))">Vista
+                                                    Maximizada &nbsp</span>
+                                            </div>
+                                            <div class="card-content" style="margin-top:10px;">
+                                                <div class="">
+                                                    <input type="file" onchange="file_changed_PDFViewer('PDF_RECIBIDAS_UPDATE')" name="archivoupload" id="id_file_pdf_update"
+                                                        accept=".pdf,.jpg" class="validate" required=""
+                                                        aria-required="true">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="modal-footer-Actualizar-pb d-flex align-items-center justify-content-end"
+            style="text-align: right;background-color: #212121;height:55px;border-radius: 0 0 10px 10px ;">
+            <a class="btn pb-btnFooter" id="botonActualizar" type="submit"
+                style="background-color: #880E4F;color:white">
+                <i class="material-icons right pbicon1">save</i>Actualizar
+            </a>
+            <!-- <input type="submit" value="Submit"> -->
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                style="background-color: #0D47A1;color:white;margin-left:10px;">
+                <i class="material-icons right  pbicon1">cancel</i>
+                CERRAR
+            </button>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+
+<!-- CSS MODAL -->
+<style>
+    .modal-content {
+        background-color: #b3b8b3;
+    }
+
+    .caja {
+        border-radius: 10px;
+        box-shadow: 2px 2px 2px 1px rgba(73, 189, 232, 0.9);
+    }
+
+    .caja:hover {
+        border-radius: 10px;
+        box-shadow: 2px 2px 2px 1px rgba(250, 238, 72, 0.9);
+    }
+
+    .pb-CardHeader {
+        border-radius: 10px 10px 0 0;
+        padding-left: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px
+    }
+
+    .pb-bg-Actualizar {
+        background: rgb(5, 47, 82);
+        background: linear-gradient(0deg, rgba(5, 47, 82, 1) 0%, rgb(38, 97, 157) 67%, rgb(146, 193, 231) 100%);
+        color: white;
+    }
+
+    .pb-btnFooter {
+        border-radius: 5px;
+    }
+
+    .pb-btnFooter:hover {
+        border-radius: 10px;
+        color: rgba(242, 255, 4, 0.9);
+        box-shadow: 2px 2px 2px 1px rgba(73, 189, 232, 0.9);
+        font-weight: bold;
+    }
+
+    .modal-header-Actualizar-pb {
+        padding-left: 20px;
+        padding-bottom: 10px;
+    }
+
+    .modal-body-Actualizar-pb {
+        padding: 2px 16px;
+    }
+
+    .modal-footer-Actualizar-pb {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 20px;
+    }
+</style>
+<!-- BOTONES MODAL -->
+
+<script>
+    $("#botonActualizar").click(function (event) {
+
+        var validaciones = 0;
+
+        if ($("#id_Update_FechaEmision").val() == "") {
+            alert("Ingrese la Fecha de Emision de la Carta Documento!");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+        if ($("#id_Update_TipoReclamo").val() == "") {
+            alert("Coloque el Tipo de Reclamo");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+        if ($("#id_Update_EstudioJuridico").val() == "") {
+            alert("Coloque el Estudio Juridico del Demandante");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+
+
+        if (validaciones == 3) {
+            // hago invisible el boton grabar para evitar la replicacion de la grabacion
+            $('.cl_modal_CD_RE_UPDATE').modal('hide');
+            event.preventDefault(); //stop submit the form, we will post it manually.
+            var form = $('#idMiFormularioUpdate')[0]; // Get form
+            var data = new FormData(form); // Create an FormData object+
+
+            data.append("id", $("#id_Update_DataBase").val());
+            // data.append("FechaEmision", $("#id_Update_FechaEmision").val());
+            // data.append("TipoReclamo", $("#id_Update_TipoReclamo").val());
+            // data.append("EstudioJuridico", $("#id_Update_EstudioJuridico").val());
+            // data.append("Comentario", $("#id_Update_Comentario").val());
+            // data.append("Cartellone", $("#id_Update_Cartellone").val());
+
+            $.ajax({
+                type: "PUT",
+                enctype: 'multipart/form-data',
+                url: "UPFILE/CD_RE",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log("SUCCESS : ", data);
+
+
+                    $('#idMiFormularioUpdate').trigger("reset");
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Se ha Actualizado su Documento',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    // Realizar Reload AJAX del listado de Cartas Documentos Recibidas.Para mustreo del ultimo registro ingresado
+                    tablaCartaDocumento.ajax.reload(null, false);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+
+        }
+
+    });
+</script>
+
+<!-- Funcion Consultar API y traer los datos del Registro consultado -->
+<script>
+    function ShowMODAL_CDRE_UPDATE(rowregistro) {
+        $('.cl_modal_CD_RE_UPDATE').modal('show');
+
+        fila = $(rowregistro).closest("tr");
+        send_ID = fila.find("td:eq(0)").text();
+        const parametros = JSON.stringify({
+            id: send_ID
+        })
+        fetch('DB/CD_RE_CUIL/' + parametros + '')
+            .then(res => res.json())
+            .then(json => {
+                $('#idMiFormularioUpdate').trigger("reset");
+                console.log(json);
+                console.log(json[0].ID);
+                console.log(json[0].CUIL);
+                console.log(json[0].FECHAING);
+                console.log(json[0].FECHADOC);
+                console.log(json[0].RECLAMO);
+                console.log(json[0].ESTUDIO);
+                console.log(json[0].COMENTARIO);
+                console.log(json[0].LINK1);
+                console.log(json[0].LINK2);
+
+                $("#id_Update_DataBase").val(json[0].ID);
+                $("#id_Update_FechaSistema").val(ConviertoFechaaInput(fecha2 = new Date(json[0].FECHAING)));
+                $("#id_Update_FechaEmision").val(ConviertoFechaaInput(fecha2 = new Date(json[0].FECHADOC)));
+                $("#id_Update_TipoReclamo").val(json[0].RECLAMO);
+                $("#id_Update_EstudioJuridico").val(json[0].ESTUDIO);
+                $("#id_Update_Comentario").val(json[0].COMENTARIO);
+                $("#id_Update_Cartellone").val(json[0].LINK1);
+
+                const RutaPDF2 = "/uploads/" + json[0].LINK2;
+                PDFObject.embed(RutaPDF2, "#PDF_RECIBIDAS_UPDATE", {
+                    pdfOpenParams: {
+                        view: 'Fit'
+                    }
+                });
+
+
+            })
+    };
+</script>
+
+<script>
+    // Previsualizacion de PDF
+    var options = {
+        pdfOpenParams: {
+            view: 'Fit',
+            scrollbar: '1',
+            toolbar: '1',
+            statusbar: '1',
+            messages: '1',
+            navpanes: '1',
+            highlight: '0,0,0,0'
+        }
+    };
+
+
+</script>

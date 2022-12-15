@@ -1,0 +1,94 @@
+<script>
+
+    
+
+
+    $("#BTN_CREATE_AU").click(function (event) {
+
+        var validaciones = 0;
+
+        if ($("#idFechaEmision_AU_CRE").val() == "") {
+            alert("Ingrese la Fecha de Emision de la Carta Documento!");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+        if ($("#idTipoReclamo_AU_CRE").val() == "") {
+            alert("Coloque el Tipo de Reclamo");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+        if ($("#idEstudioJuridico_AU_CRE").val() == "") {
+            alert("Coloque el Estudio Juridico del Demandante");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+        if ($("#id_file_pdf_AU_CRE").val() == "") {
+            alert("Debe Seleccionar el PDF del original");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+        if (validaciones == 4) {
+            // hago invisible el boton grabar para evitar la replicacion de la grabacion
+            $('.cl_modal_CD_AU_CREATE').modal('hide');
+            event.preventDefault(); //stop submit the form, we will post it manually.
+            var form = $('#idMiFormulario_AU_CREATE')[0]; // Get form
+            var data = new FormData(form); // Create an FormData object
+
+            data.append("numerocuil", $("#cuilpersona_AU_CRE").text());
+            data.append("idFechaEmision_AU_CRE", $("#idFechaEmision_AU_CRE").val());
+            data.append("idTipo_AU_CRE", $("#idTipo_AU_CRE option:selected" ).text()); 
+            data.append("idFechaAudiencia_AU_CRE", $("#idFechaAudiencia_AU_CRE").val());
+            data.append("hora_AU_CRE", $("#hora option:selected" ).text());         
+            data.append("idComentario_AU_CRE", $("#idComentario_AU_CRE").val());
+            data.append("idCartellone_AU_CRE", $("#idCartellone_AU_CRE").val());
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "UPFILE/CD_AU", //CREAR CONTROLADOR
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log("SUCCESS : ", data);
+                    $('#idMiFormulario_AU_CREATE').trigger("reset");
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Se ha Grabado su Documento',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    // Realizar Reload AJAX del listado de Cartas Documentos Recibidas.Para mustreo del ultimo registro ingresado
+                    tablaAudiencias.ajax.reload(null, false);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+
+        }
+
+    });
+
+
+
+
+
+
+    // Librerias Adicionales
+
+    $('#timepicker').timepicker({
+        uiLibrary: 'bootstrap4'
+    });
+</script>

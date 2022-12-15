@@ -1,0 +1,555 @@
+<!-- TOTAL DE CARTAS DOCUMENTO y TIPO -->
+<!-- Graph_DOCS_TOT -->
+<script>
+    var Estilo1 = {
+        // colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+        //     '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'
+        // ],
+        chart: {
+            backgroundColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 1,
+                    y2: 1
+                },
+                stops: [
+                    [0, '#1D2552'],
+                    [1, '#3e3e40']
+                ]
+            },
+            style: {
+                fontFamily: '\'Unica One\', sans-serif'
+            },
+            plotBorderColor: '#606063'
+        },
+        title: {
+            style: {
+                color: '#E0E0E3',
+                textTransform: 'uppercase',
+                fontSize: '20px'
+            }
+        },
+        subtitle: {
+            style: {
+                color: '#E0E0E3',
+                textTransform: 'uppercase'
+            }
+        },
+        xAxis: {
+            gridLineColor: '#707073',
+            labels: {
+                style: {
+                    color: '#E0E0E3'
+                }
+            },
+            lineColor: '#707073',
+            minorGridLineColor: '#505053',
+            tickColor: '#707073',
+            title: {
+                style: {
+                    color: '#A0A0A3'
+
+                }
+            }
+        },
+        yAxis: {
+            gridLineColor: '#707073',
+            labels: {
+                style: {
+                    color: '#E0E0E3'
+                }
+            },
+            lineColor: '#707073',
+            minorGridLineColor: '#505053',
+            tickColor: '#707073',
+            tickWidth: 1,
+            title: {
+                style: {
+                    color: '#A0A0A3'
+                }
+            }
+        },
+        tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    color: '#F0F0F3',
+                    style: {
+                        fontSize: '13px'
+                    }
+                },
+                marker: {
+                    lineColor: '#333'
+                }
+            },
+            boxplot: {
+                fillColor: '#505053'
+            },
+            candlestick: {
+                lineColor: 'white'
+            },
+            errorbar: {
+                color: 'white'
+            }
+        },
+        legend: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            itemStyle: {
+                color: '#E0E0E3'
+            },
+            itemHoverStyle: {
+                color: '#FFF'
+            },
+            itemHiddenStyle: {
+                color: '#606063'
+            },
+            title: {
+                style: {
+                    color: '#C0C0C0'
+                }
+            }
+        },
+        credits: {
+            style: {
+                color: '#666'
+            }
+        },
+        labels: {
+            style: {
+                color: '#707073'
+            }
+        },
+        drilldown: {
+            activeAxisLabelStyle: {
+                color: '#F0F0F3'
+            },
+            activeDataLabelStyle: {
+                color: '#F0F0F3'
+            }
+        },
+        navigation: {
+            buttonOptions: {
+                symbolStroke: '#DDDDDD',
+                theme: {
+                    fill: '#505053'
+                }
+            }
+        },
+        // scroll charts
+        rangeSelector: {
+            buttonTheme: {
+                fill: '#505053',
+                stroke: '#000000',
+                style: {
+                    color: '#CCC'
+                },
+                states: {
+                    hover: {
+                        fill: '#707073',
+                        stroke: '#000000',
+                        style: {
+                            color: 'white'
+                        }
+                    },
+                    select: {
+                        fill: '#000003',
+                        stroke: '#000000',
+                        style: {
+                            color: 'white'
+                        }
+                    }
+                }
+            },
+            inputBoxBorderColor: '#505053',
+            inputStyle: {
+                backgroundColor: '#333',
+                color: 'silver'
+            },
+            labelStyle: {
+                color: 'silver'
+            }
+        },
+        navigator: {
+            handles: {
+                backgroundColor: '#666',
+                borderColor: '#AAA'
+            },
+            outlineColor: '#CCC',
+            maskFill: 'rgba(255,255,255,0.1)',
+            series: {
+                color: '#7798BF',
+                lineColor: '#A6C7ED'
+            },
+            xAxis: {
+                gridLineColor: '#505053'
+            }
+        },
+        scrollbar: {
+            barBackgroundColor: '#808083',
+            barBorderColor: '#808083',
+            buttonArrowColor: '#CCC',
+            buttonBackgroundColor: '#606063',
+            buttonBorderColor: '#606063',
+            rifleColor: '#FFF',
+            trackBackgroundColor: '#404043',
+            trackBorderColor: '#404043'
+        }
+    };
+</script>
+
+
+<!-- // Estilo Charts -->
+<style>
+    #Graph_DOCS_TOT {
+        height: 412px;
+    }
+</style>
+
+
+<script>
+    function CargoGrafico1() {
+        // Declaration  of  variables for change  dinamic the graph
+        var TOT_CD;
+        var TOT_CO;
+        var TOT_AU;
+
+        // Extract the  data  from  DataBase
+        fetch('DB/RES_DOCS')
+            .then(response => response.json())
+            .then(data => {
+                TOT_CD = data[0].TOTAL;
+                TOT_CO = data[1].TOTAL;
+                TOT_AU = data[2].TOTAL;
+
+                var Opciones_Graph_DOCS_TOT = {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'TOTAL CARTAS DOCUMENTO'
+                    },
+                    subtitle: {
+                        text: 'Desarrollado por: productivebrains.com'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <br>{point.percentage:.1f}%</br>'
+                    },
+                    accessibility: {
+                        point: {
+                            valueSuffix: '%'
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>:<br>{point.percentage:.1f} %<br>TOTAL: {point.y}',
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Brands',
+                        colorByPoint: true,
+                        data: [{
+                            name: 'RECIBIDAS',
+                            y: TOT_CD,
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: 'EMITIDAS',
+                            y: TOT_CO
+                        }, {
+                            name: 'AUDIENCIAS',
+                            y: TOT_AU
+                        }]
+                    }],
+
+                    colors: [
+                        '#DC3545',
+                        '#28A745',
+                        '#4caccf'
+                    ]
+                }
+
+                Torta1 = Highcharts.chart('Graph_DOCS_TOT', Highcharts.merge(Opciones_Graph_DOCS_TOT, Estilo1));
+            });
+
+    }
+</script>
+
+
+<!-- ************************************************************** -->
+<!-- TOTAL Y TIPO DE RECLAMOS -->
+<!-- Graph_RECL_TOT -->
+<script>
+    var Estilo2 = {
+        // colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+        //     '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'
+        // ],
+        chart: {
+            backgroundColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 1,
+                    y2: 1
+                },
+                stops: [
+                    [0, '#1D2552'],
+                    [1, '#3e3e40']
+                ]
+            },
+            style: {
+                fontFamily: '\'Unica One\', sans-serif'
+            },
+            plotBorderColor: '#606063'
+        },
+        title: {
+            style: {
+                color: '#E0E0E3',
+                textTransform: 'uppercase',
+                fontSize: '20px'
+            }
+        },
+        subtitle: {
+            style: {
+                color: '#E0E0E3',
+                textTransform: 'uppercase'
+            }
+        },
+        xAxis: {
+            gridLineColor: '#707073',
+            labels: {
+                style: {
+                    color: '#E0E0E3'
+                }
+            },
+            lineColor: '#707073',
+            minorGridLineColor: '#505053',
+            tickColor: '#707073',
+            title: {
+                style: {
+                    color: '#A0A0A3'
+
+                }
+            }
+        },
+        yAxis: {
+            gridLineColor: '#707073',
+            labels: {
+                style: {
+                    color: '#E0E0E3'
+                }
+            },
+            lineColor: '#707073',
+            minorGridLineColor: '#505053',
+            tickColor: '#707073',
+            tickWidth: 1,
+            title: {
+                style: {
+                    color: '#A0A0A3'
+                }
+            }
+        },
+        tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    color: '#F0F0F3',
+                    style: {
+                        fontSize: '13px'
+                    }
+                },
+                marker: {
+                    lineColor: '#333'
+                }
+            },
+            boxplot: {
+                fillColor: '#505053'
+            },
+            candlestick: {
+                lineColor: 'white'
+            },
+            errorbar: {
+                color: 'white'
+            }
+        },
+        legend: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            itemStyle: {
+                color: '#E0E0E3'
+            },
+            itemHoverStyle: {
+                color: '#FFF'
+            },
+            itemHiddenStyle: {
+                color: '#606063'
+            },
+            title: {
+                style: {
+                    color: '#C0C0C0'
+                }
+            }
+        },
+        credits: {
+            style: {
+                color: '#666'
+            }
+        },
+        labels: {
+            style: {
+                color: '#707073'
+            }
+        },
+        drilldown: {
+            activeAxisLabelStyle: {
+                color: '#F0F0F3'
+            },
+            activeDataLabelStyle: {
+                color: '#F0F0F3'
+            }
+        },
+        navigation: {
+            buttonOptions: {
+                symbolStroke: '#DDDDDD',
+                theme: {
+                    fill: '#505053'
+                }
+            }
+        },
+        // scroll charts
+        rangeSelector: {
+            buttonTheme: {
+                fill: '#505053',
+                stroke: '#000000',
+                style: {
+                    color: '#CCC'
+                },
+                states: {
+                    hover: {
+                        fill: '#707073',
+                        stroke: '#000000',
+                        style: {
+                            color: 'white'
+                        }
+                    },
+                    select: {
+                        fill: '#000003',
+                        stroke: '#000000',
+                        style: {
+                            color: 'white'
+                        }
+                    }
+                }
+            },
+            inputBoxBorderColor: '#505053',
+            inputStyle: {
+                backgroundColor: '#333',
+                color: 'silver'
+            },
+            labelStyle: {
+                color: 'silver'
+            }
+        },
+        navigator: {
+            handles: {
+                backgroundColor: '#666',
+                borderColor: '#AAA'
+            },
+            outlineColor: '#CCC',
+            maskFill: 'rgba(255,255,255,0.1)',
+            series: {
+                color: '#7798BF',
+                lineColor: '#A6C7ED'
+            },
+            xAxis: {
+                gridLineColor: '#505053'
+            }
+        },
+        scrollbar: {
+            barBackgroundColor: '#808083',
+            barBorderColor: '#808083',
+            buttonArrowColor: '#CCC',
+            buttonBackgroundColor: '#606063',
+            buttonBorderColor: '#606063',
+            rifleColor: '#FFF',
+            trackBackgroundColor: '#404043',
+            trackBorderColor: '#404043'
+        }
+    };
+</script>
+
+<!-- // Estilo Charts -->
+<style>
+    #Graph_RECL_TOT {
+        height: 400px;
+    }
+</style>
+
+<script>
+    function CargoGrafico2() {
+        fetch('DB/RES_RECLAMOS')
+            .then(response => response.json())
+            .then(data => {
+                var processed_json = new Array();
+                for (i = 0; i < data.length; i++) {
+                    processed_json.push([data[i].RECLAMO, parseInt(data[i].TOTAL)]);
+                }
+                var Opciones_Graph_RECL_TOT = {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'TIPOS DE RECLAMOS'
+                    },
+                    subtitle: {
+                        text: 'Desarrollado por: productivebrains.com'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    accessibility: {
+                        point: {
+                            valueSuffix: '%'
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>:<br>{point.percentage:.1f} %<br>TOTAL: {point.y}',
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'TOTAL',
+                        colorByPoint: true,
+                        data: processed_json
+                    }]
+                }
+
+                Torta2 = Highcharts.chart('Graph_RECL_TOT', Highcharts.merge(Opciones_Graph_RECL_TOT, Estilo2));
+            });
+    }
+</script>

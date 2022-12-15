@@ -1,0 +1,208 @@
+<%- include ("partials/_header") %>
+
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                <h5>Nueva Persona</h5>
+                <div class="card animated flipInY">
+                    <div class="card-body " style="background-color: lightgrey;">
+                        <form action="/saveNewPerson" method="POST">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="inputLegajo">Legajo</label>
+                                    <input type="text" class="form-control" id="inputLegajo" placeholder="Legajo"
+                                        name="legajo">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputIdCode">Id Code</label>
+                                    <input type="text" class="form-control" id="inputIdCode" placeholder="Id Code"
+                                        name="idcode">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputCuil">C.U.I.L</label>
+                                    <input type="text" class="form-control" id="inputCuil" placeholder="C.U.I.L."
+                                        name="CUIL">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputDni">D.N.I</label>
+                                    <input type="text" class="form-control" id="inputDni" placeholder="D.N.I."
+                                        name="DNI">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="inputApellido">Apellidos</label>
+                                    <input type="text" class="form-control" id="inputApellido" placeholder="Apellidos"
+                                        name="apellido">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputNombre">Nombres</label>
+                                    <input type="text" class="form-control" id="inputNombre" placeholder="Nombres"
+                                        name="nombre">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputFuncion">Funcion</label>
+                                    <input type="text" class="form-control" id="inputFuncion" placeholder="Funcion"
+                                        name="funcion">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputSector">Sector</label>
+                                    <input type="text" class="form-control" id="inputSector" placeholder="Sector"
+                                        name="sector">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputInicio">Inicio</label>
+                                    <input type="text" class="form-control" id="inputInicio" placeholder="Inicio"
+                                        name="inicio">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputInicioCovid">Inicio Covid</label>
+                                    <input type="text" class="form-control " id="inputInicioCovid"
+                                        placeholder="Inicio Covid" name="iniciocovid">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="inputCondicion">Condicion</label>
+                                    <input type="text" class="form-control" id="inputCondicion" placeholder="Condicion"
+                                        name="condicion">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputlocalidad">Localidad</label>
+                                    <input type="text" class="form-control" id="inputlocalidad" placeholder="Localidad"
+                                        name="localidad">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputProvincia">Provincia</label>
+                                    <input type="text" class="form-control" id="inputProvincia" placeholder="Provincia"
+                                        name="provincia">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputBarrio">Barrio</label>
+                                    <input type="text" class="form-control" id="inputBarrio" placeholder="Barrio"
+                                        name="barrio">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="inputCalle">Calle</label>
+                                    <input type="text" class="form-control" id="inputCalle" placeholder="Calle"
+                                        name="calle">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label for="inputNumero">Numero</label>
+                                    <input type="text" class="form-control" id="inputNumero" placeholder="Numero"
+                                        name="numero">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label for="inputPiso">Piso</label>
+                                    <input type="text" class="form-control" id="inputPiso" placeholder="Piso"
+                                        name="piso">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label for="inputDepto">Depto</label>
+                                    <input type="text" class="form-control" id="inputDepto" placeholder="Depto"
+                                        name="depto">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label for="inputCodPostal">Cod.Postal</label>
+                                    <input type="text" class="form-control" id="inputCodPostal" placeholder="Cod.Postal"
+                                        name="codpostal">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="inputTelcasa">Tel.Casa</label>
+                                    <input type="text" class="form-control" id="inputTelcasa" placeholder="Tel.Casa"
+                                        name="telcasa">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="inputTelcelular">Celular</label>
+                                    <input type="text" class="form-control" id="inputTelcelular" placeholder="Celular"
+                                        name="telcelular">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="inputNacimiento">Fecha Nac.</label>
+                                    <input type="text" class="form-control" id="inputNacimiento"
+                                        placeholder="Fecha Nac." name="nacimiento">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="inputNacionalidad">Nacionalidad</label>
+                                    <input type="text" class="form-control" id="inputNacionalidad"
+                                        placeholder="Nacionalidad" name="nacionalidad">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="inputEstadocivil">Estado Civil</label>
+                                    <input type="text" class="form-control" id="inputEstadocivil"
+                                        placeholder="Estado Civil" name="estadocivil">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputCbu">C.B.U.</label>
+                                    <input type="text" class="form-control" id="inputCbu" placeholder="C.B.U."
+                                        name="cbu">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputFode">Fondo de Desempleo</label>
+                                    <input type="text" class="form-control" id="inputFode"
+                                        placeholder="Fondo de Desempleo" name="fode">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="inputDomolavarria">Domicilio en Olavarria</label>
+                                    <input type="text" class="form-control" id="inputDomolavarria"
+                                        placeholder="Domicilio en Olavarria" name="domolavarria">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputAltaafip">Alta A.F.I.P</label>
+                                    <input type="text" class="form-control" id="inputAltaafip"
+                                        placeholder="Alta A.F.I.P" name="altaafip">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputCategoria">Categoria</label>
+                                    <input type="text" class="form-control" id="inputCategoria" placeholder="Categoria"
+                                        name="categoria">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="inputConvenio">Convenio</label>
+                                    <input type="text" class="form-control" id="inputConvenio" placeholder="Convenio"
+                                        name="convenio">
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="inputObrasocial">Obra Social</label>
+                                    <input type="text" class="form-control" id="inputObrasocial"
+                                        placeholder="Obra Social" name="obrasocial">
+                                </div>
+                            </div>
+
+                            <!-- <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gridCheck">
+                            <label class="form-check-label" for="gridCheck">
+                                Check me out
+                            </label>
+                        </div>
+                    </div>-->
+                            <button type="submit" class="btn btn-primary">Grabar nueva Persona</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <%- include ("partials/_footer") %>

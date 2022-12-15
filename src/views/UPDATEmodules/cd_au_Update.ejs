@@ -1,0 +1,348 @@
+<!-- MODAL -->
+<div id="id_Modal_CD_AU_UPDATE" class="modal fade cl_modal_AU_UPDATE" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width: 90%!important;margin-top:2px!important;" role="document">
+        <div class="modal-content caja">
+            <form id="idMiFormulario_AU_UPDATE" name="myForm">
+                <div class="modal-header-Alta-pb pb-bg-alta pb-CardHeader">
+                    <h5 style="margin:0;color: rgb(255, 255, 255)"><i class="fas fa-handshake"></i> UPDATE AUDIENCIA - C.U.I.L. :
+                        <span class="demo-class-cuil" id="cuilpersona_AU_UPDATE">xxx</span> - <span
+                            class="demo-class-apenom">yyy</span>
+                    </h5>
+                </div>
+                <br>
+                <div class="modal-body-Alta-pb  card-content">
+                    <div class="container">
+                        <div class="row" style="flex-wrap:wrap;">
+                            <div class="col s12 m6 l6 x6">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2" >
+                                        <i class="material-icons prefix text-danger">flag</i>
+                                        <label for="idDataBase_AU_UPDATE">ID</label>
+                                        <input type="text" class="form-control"name="idDataBase_AU_UPDATE" id="idDataBase_AU_UPDATE" required="" aria-required="true" disabled>
+                                    </div>
+                                    <div class="form-group col-md-5" >
+                                        <i class="material-icons prefix text-danger">today</i>
+                                        <label for="idFechaSistema_AU_UPDATE">Ingresado en Sistema</label>
+                                        <input type="date" class="form-control" id="idFechaSistema_AU_UPDATE"disabled>
+                                    </div>
+
+                                    <div class="form-group col-md-5">
+                                        <i class="material-icons prefix text-success">today</i>
+                                        <label for="idFechaEmision_AU_UPDATE">Fecha Emision</label>
+                                        <input id="idFechaEmision_AU_UPDATE"  type="date"
+                                            class="form-control validate" required="" aria-required="true">
+                                        <!-- <input type="text" class=" form-control" name="idnamecuil_AU_UPDATE"
+                                            id="idnamecuil_AU_UPDATE" hidden> -->
+                                    </div>
+                                </div>
+
+                                
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <i class="material-icons prefix text-warning">mode_edit</i>
+                                        <label for="idTipo_AU_UPDATE">Tipo Audiencia</label>
+                                        <select id="idTipo_AU_UPDATE" class="form-select form-control validate"
+                                            aria-label="Default select example">
+                                            <option value="1" selected>Presencial</option>
+                                            <option value="2">Virtual</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <i class="material-icons prefix text-success">today</i>
+                                        <label for="idFechaAudiencia_AU_UPDATE">Fecha Audiencia</label>
+                                        <input id="idFechaAudiencia_AU_UPDATE" type="date"
+                                            class="form-control validate" required="" aria-required="true">
+                                    </div>
+
+                                    
+                                    <div class="form-group col-md-3">
+                                        <i class="material-icons prefix text-warning">mode_edit</i>
+                                        <label for="idComentario_AU_lugar">Hora </label>
+                                        <!-- <input id="timepicker" name="hora" class="form-control validate" required="" aria-required="true" /> -->
+                                        <input id="timepicker2"  name="Audiencia_Update_HORAAUDI" class="form-control validate" required="" aria-required="true" />
+                                        
+                                    </div>
+                                    
+
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <i class="material-icons prefix text-warning">mode_edit</i>
+                                        <label for="idComentario_AU_UPDATE">Comentario</label>
+                                        <textarea id="idComentario_AU_UPDATE" 
+                                            class="form-control" rows="4"
+                                            placeholder="En Caso de Audiencia Presencial Especifique Ciudad y Lugar"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <i class="material-icons prefix text-warning">cloud</i>
+                                        <label for="idCartellone_AU_UPDATE">Cartellone Cloud
+                                            <span style="font-size: 12px;color:rgb(12, 9, 211)">(Ingrese el link de
+                                                sus hosting en la nube)</span> </label>
+                                        <input type="text" class="form-control" id="idCartellone_AU_UPDATE"
+                                           >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col s12 m6 l6 x6">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <div class="card">
+                                            <div class="card-image">
+                                                <div id="PDF_AUDIENCIA_UPDATE" class=""></div>
+                                                <span class="pb_card-title"
+                                                    onclick="fullscreenFUNCTION(document.getElementById('PDF_AUDIENCIA_UPDATE'))">Vista
+                                                    Maximizada &nbsp</span>
+                                            </div>
+                                            <div class="card-content" style="margin-top:10px;">
+                                                <div class="">
+                                                    <input type="file"
+                                                        onchange="file_changed_PDFViewer('PDF_AUDIENCIA_UPDATE')"
+                                                        name="archivoupload" id="id_file_pdf_AU_UPDATE" accept=".pdf,.jpg"
+                                                        class="validate" required="" aria-required="true">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer-Alta-pb d-flex align-items-center justify-content-end"
+                    style="text-align: right;background-color: #212121;height:55px;border-radius: 0 0 10px 10px ;">
+                    <a class="btn pb-btnFooter" id="BTN_AU_UPDATE" type="submit"
+                        style="background-color: #880E4F;color:white">
+                        <i class="material-icons right pbicon1">save</i>Actualizar
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        style="background-color: #0D47A1;color:white;margin-left:10px;">
+                        <i class="material-icons right  pbicon1">cancel</i>
+                        CERRAR
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#timepicker2').timepicker({
+        uiLibrary: 'bootstrap4'
+    });
+</script>
+
+
+<!-- BOTONES MODAL -->
+
+<script>
+    $("#BTN_AU_UPDATE").click(function (event) {
+
+        var validaciones = 0;
+
+        if ($("#idFechaEmision_AU_UPDATE").val() == "") {
+            alert("Ingrese la Fecha de Emision de la Carta Documento!");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+        if ($("#idTipoReclamo_AU_UPDATE").val() == "") {
+            alert("Coloque el Tipo de Reclamo");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+
+        if ($("#idEstudioJuridico_AU_UPDATE").val() == "") {
+            alert("Coloque el Estudio Juridico del Demandante");
+            validaciones = 0;
+        } else {
+            validaciones = validaciones + 1;
+        }
+        
+        if (validaciones == 3) {
+            // hago invisible el boton grabar para evitar la replicacion de la grabacion
+            $('.cl_modal_AU_UPDATE').modal('hide');
+            event.preventDefault(); //stop submit the form, we will post it manually.
+            var form = $('#idMiFormulario_AU_UPDATE')[0]; // Get form
+            var data = new FormData(form); // Create an FormData object
+            
+
+            data.append("Audiencia_Update_ID", $("#idDataBase_AU_UPDATE").val());
+            data.append("Audiencia_Update_FECHADOC", $("#idFechaEmision_AU_UPDATE").val());
+            data.append("Audiencia_Update_TIPO", $("#idTipo_AU_UPDATE option:selected" ).text()); 
+            data.append("Audiencia_Update_FECHAAUDI", $("#idFechaAudiencia_AU_UPDATE").val());
+            data.append("Audiencia_Update_HORAAUDI", $("#hora option:selected" ).text());         
+            data.append("Audiencia_Update_COMENTARIO", $("#idComentario_AU_UPDATE").val());
+            data.append("Audiencia_Update_LINK1", $("#idCartellone_AU_UPDATE").val());
+
+            $.ajax({
+                type: "PUT",
+                enctype: 'multipart/form-data',
+                url: "UPFILE/CD_AU", //CREAR CONTROLADOR
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log("SUCCESS : ", data);
+                    $('#idMiFormulario_AU_UPDATE').trigger("reset");
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Se ha Grabado su Documento',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    // Realizar Reload AJAX del listado de Cartas Documentos Recibidas.Para mustreo del ultimo registro ingresado
+                    tablaAudiencias.ajax.reload(null, false);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+
+        }
+
+    });
+</script>
+
+<!-- 1) First Charge of Page --- Funcion Consultar API y traer los datos del Registro consultado -->
+<script>
+    function ShowMODAL_AU_UPDATE(rowregistro) {
+        $('.cl_modal_AU_UPDATE').modal('show');
+
+        fila = $(rowregistro).closest("tr");
+        send_ID = fila.find("td:eq(0)").text();
+        const parametros = JSON.stringify({
+            id: send_ID
+        })
+        fetch('DB/AU_CUIL/' + parametros + '')
+            .then(res => res.json())
+            .then(json => {
+                console.log(json);
+                console.log(json[0].ID);
+                console.log(json[0].CUIL);
+                console.log(json[0].FECHAING);
+                console.log(json[0].FECHADOC);
+                console.log(json[0].TIPO);
+                console.log(json[0].FECHAAUDI);
+                console.log(json[0].HORAAUDI);
+                console.log(json[0].COMENTARIO);
+                console.log(json[0].LINK1);
+                console.log(json[0].LINK2);
+
+                $("#idDataBase_AU_UPDATE").val(json[0].ID);
+                $("#idFechaSistema_AU_UPDATE").val(ConviertoFechaaInput(fecha11 = new Date(json[0].FECHAING)));
+                $("#idFechaEmision_AU_UPDATE").val(ConviertoFechaaInput(fecha22 = new Date(json[0].FECHADOC)));
+                
+                if (json[0].TIPO==='Virtual') {
+                    $("#idTipo_AU_UPDATE").val(2).change();             
+                } else {  
+                    $("#idTipo_AU_UPDATE").val(1).change();             
+                }
+
+                $("#idFechaAudiencia_AU_UPDATE").val(ConviertoFechaaInput(fecha33 = new Date(json[0].FECHAAUDI)));
+                $("#timepicker2").val(json[0].HORAAUDI);
+                $("#idComentario_AU_UPDATE").val(json[0].COMENTARIO);
+                $("#idCartellone_AU_UPDATE").val(json[0].LINK1);
+
+                const RutaPDF3 = "/uploads/" + json[0].LINK2;
+                PDFObject.embed(RutaPDF3, "#PDF_AUDIENCIA_UPDATE", {
+                    pdfOpenParams: {
+                        view: 'Fit'
+                    }
+                });
+
+            });
+    };
+    function file_changed_PDFViewer () {
+        PDFObject.embed(URL.createObjectURL(event.target.files[0]), "#PDF_CONTESTACIONES_UPDATE", options);
+        console.log(event.target.files[0]);
+
+    };
+</script>
+
+<!-- CSS MODAL -->
+<style>
+    /* Modal Content */
+    .modal-content-Alta-pb {
+        position: relative;
+        /* background-color: #6a946a !important; */
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 80%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s
+    }
+
+    .modal-content {
+        background-color: #b3b8b3;
+    }
+
+    .caja {
+        border-radius: 10px;
+        box-shadow: 2px 2px 2px 1px rgba(73, 189, 232, 0.9);
+    }
+
+    .caja:hover {
+        border-radius: 10px;
+        box-shadow: 2px 2px 2px 1px rgba(250, 238, 72, 0.9);
+    }
+
+    .pb-CardHeader {
+        border-radius: 10px 10px 0 0;
+        padding-left: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px
+    }
+
+    .pb-bg-alta {
+        background: rgb(5, 82, 34);
+        background: linear-gradient(0deg, rgba(5, 82, 34, 1) 0%, rgba(9, 96, 25, 1) 67%, rgba(101, 219, 100, 1) 100%);
+        color: white;
+    }
+
+    .pb-btnFooter {
+        border-radius: 5px;
+    }
+
+    .pb-btnFooter:hover {
+        border-radius: 10px;
+        color: rgba(242, 255, 4, 0.9);
+        box-shadow: 2px 2px 2px 1px rgba(73, 189, 232, 0.9);
+        font-weight: bold;
+    }
+
+    .modal-header-Alta-pb {
+        padding-left: 20px;
+        padding-bottom: 10px;
+    }
+
+    .modal-body-Alta-pb {
+        padding: 2px 16px;
+    }
+
+    .modal-footer-Alta-pb {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 20px;
+    }
+
+    /* .modal-footer-Alta-pb {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 20px;
+    } */
+</style>

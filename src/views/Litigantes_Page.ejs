@@ -1,0 +1,608 @@
+<%- include ("partials/_header") %>
+
+<!-- Modales -->
+<%- include ("READmodules/modal_personas_Detalle") %>
+
+<%- include ("GRAPHS/Graph_PIE_DOCS") %>
+
+
+
+<div class="container-fluid mt-3" id="cuerpo">
+    <div class="row mb-2">
+        <div class="col-12">
+            <h3 class="text-info">Listado de Litigantes </h3>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <!-- <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+            
+        </div> -->
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-12" id="datatable">
+                <div class="row animated flipInY">
+                    <div class="col-12 py-3" style="background-color: #D3D3D5;">
+                        <table id="tablaLitigantes" class="table table-striped table-bordered dt-responsive nowrap"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Acciones</th>
+                                    <th>CUIL</th>
+                                    <th>Apellido</th>
+                                    <th>Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div id="Graph_RECL_TOT"></div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div id="grafico1" style="  display:none;"></div> <!-- LLAMAR a EJS -->
+            <div id="Graph_DOCS_TOT"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- Estilo Charts -->
+<style>
+    #grafico1 {
+        height: 400px;
+    }
+
+
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #EBEBEB;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+</style>
+
+<!-- Estilo Datatable -->
+<style>
+    td {
+        padding: 0.2em 0.2em !important;
+    }
+
+    tr {
+        text-align: center !important;
+    }
+
+    .bg-mirage {
+        background: #16222a;
+        background: -webkit-linear-gradient(to right, #3a6073, #16222a);
+        background: linear-gradient(to right, #3a6073, #16222a);
+    }
+
+    .bg-fondodatatable {
+        background-color: #f3f3f3;
+    }
+
+    table#jornales.dataTable thead:hover {
+        background-color: #ffa;
+    }
+
+    table#jornales.dataTable td:hover {
+        background-color: #ffa;
+    }
+
+    table#jornales.dataTable tr:hover {
+        background-color: rgb(176, 239, 253);
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        tablaLitigantes = $("#tablaLitigantes").DataTable({
+            ajax: {
+                url: `DB/all_Litigantes`,
+                dataSrc: "",
+                "processing": true,
+                "serverSide": true,
+                async: true
+            },
+            "columns": [{
+                    defaultContent: "<div class='text-center'>" +
+                        "<div class='btn-group'>" + // VER POSICION DE TOOLTIP LEFT NO FUNCIONA
+                        "<button class='btn btn-success btn-sm btnDocumentos mr-3' data-toggle='tooltip' data-placement='left' title='Visualizar Documentos'>" +
+                        "<i class='far fa-folder-open'></i>" +
+                        "</button>" +
+                        "<button class='btn btn-warning btn-sm btnQuitarLitigante mr-3' data-toggle='tooltip' data-placement='right' title='Deshacer Litigio'>" +
+                        "<i class='fas fa-undo-alt'></i>" +
+                        "</button>" +
+                        "<button class='btn btn-primary btn-sm btn_Detalle_Persona' data-toggle='tooltip' data-placement='top' title='Ver: Informacion completa'>" +
+                        "<i class='far fa-eye'></i>" +
+                        "</button>" +
+                        "</div>" +
+                        "</div>",
+                },
+                {
+                    data: "CUIL"
+                },
+                {
+                    data: "apellido"
+                },
+                {
+                    data: "nombre"
+                }
+            ],
+            pageLength: 5,
+            lengthMenu: [
+                [5, 10, 20, 50, -1],
+                [5, 10, 20, 50, 'Todos']
+            ],
+            "pagingType": "full_numbers",
+            "dom": "<'row'<'col-md-7'B><'col-md-5 text-right'l>>" +
+                "<'row'<'col-md-7 text-left'i><'col-md-5'f>>" +
+                "<'row'<'col-md-12't>><'row'<'col-md-12'p>>",
+            buttons: [{
+                    extend: 'copy',
+                    text: ' <i class="material-icons text-white align-middle">scanner</i> Copiar al Portapapeles',
+                    titleAttr: 'Mantene la copia copia de registro en memoria, y pegado donde se te raje',
+                },
+                {
+                    extend: 'excel',
+                    text: ' <i class="fas fa-file-excel bg-white text-success align-middle"></i> Excel',
+                    titleAttr: 'Descarge un XLS del filtrado realizado',
+
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    // messageTop: nombrearchivo,
+                    messageBottom: 'PDF created by ProductiveBrains.com - developed by SJAS.',
+                    // title: TituloPDF,
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: ' <i class="far fa-file-pdf bg-danger text-white align-middle"></i> PDF',
+                    titleAttr: 'Abre en una nueva Pestaña el PDF del filtrado realizado',
+                }
+            ],
+            "language": {
+                "url": "/json/lenguajedatatables.json"
+            },
+        });
+
+
+        
+    })
+</script>
+
+<!-- Botones -->
+<script>
+    //Agregar Litigante
+    $(document).on("click", ".btnDocumentos", function () {
+        // alert('hola');
+        fila = $(this).closest("tr");
+        cuil = fila.find("td:eq(1)").text();
+        apellido = fila.find("td:eq(2)").text();
+        nombre = fila.find("td:eq(3)").text();
+        const persona = apellido + ' ' + nombre;
+        
+        window.open('View_Litigantes_Docs?cuil=' + cuil + '&persona=' + persona + '', '_self')
+    });
+    
+    $(document).on("click", ".btnQuitarLitigante", function () {
+        // console.log("Litigante Activo");
+        fila = $(this).closest("tr");
+        cuil = fila.find("td:eq(1)").text();
+        apellido = fila.find("td:eq(2)").text();
+        nombre = fila.find("td:eq(3)").text();
+
+        Swal.fire({
+            title: "Confirma a esta persona como NO Litigante?",
+            text: apellido + " " + nombre + " - C.U.I.L.: " + cuil,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, Quiero quitarlo, no es Litigante!",
+            cancelButtonText: "   No, Cancelar!   ",
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: `DB/Update_Judiciales`,
+                    type: "POST",
+                    datatype: "json",
+                    async: true,
+                    data: {
+                        CUIL: cuil,
+                        VALOR: "NO"
+                    },
+                    success: function () {
+                        tablaLitigantes.ajax.reload(null, false);
+
+                    }
+                });
+                Swal.fire(
+                    apellido + " " + nombre + " - C.U.I.L.: " + cuil,
+                    "Ha sido retirado del Listado de Litigantes.",
+                    "success"
+                );
+
+            }
+        });
+
+    });
+
+    // function myFunction() {
+    //     location.href = "#datatable";
+    // }
+  
+    $(document).on("click", ".btn_Detalle_Persona", function () {
+        fila = $(this).closest("tr");
+        cuil = fila.find("td:eq(1)").text();
+        $('.modal_Detalle_Persona').modal('show');
+        PersonaDetalleRead(cuil); 
+    })
+
+ 
+
+    //Boton para Mostrar los datos del litigante
+    $(document).on("click", ".btnInformacionPersona", function () {
+        fila = $(this).closest("tr");
+        cuil = fila.find("td:eq(1)").text();
+        apellido = fila.find("td:eq(2)").text();
+        nombre = fila.find("td:eq(3)").text();
+
+
+    });
+</script>
+
+
+
+<script>
+    var darcUnica = {
+        // colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+        //     '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'
+        // ],
+        chart: {
+            backgroundColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 1,
+                    y2: 1
+                },
+                stops: [
+                    [0, '#1D2552'],
+                    [1, '#3e3e40']
+                ]
+            },
+            style: {
+                fontFamily: '\'Unica One\', sans-serif'
+            },
+            plotBorderColor: '#606063'
+        },
+        title: {
+            style: {
+                color: '#E0E0E3',
+                textTransform: 'uppercase',
+                fontSize: '20px'
+            }
+        },
+        subtitle: {
+            style: {
+                color: '#E0E0E3',
+                textTransform: 'uppercase'
+            }
+        },
+        xAxis: {
+            gridLineColor: '#707073',
+            labels: {
+                style: {
+                    color: '#E0E0E3'
+                }
+            },
+            lineColor: '#707073',
+            minorGridLineColor: '#505053',
+            tickColor: '#707073',
+            title: {
+                style: {
+                    color: '#A0A0A3'
+
+                }
+            }
+        },
+        yAxis: {
+            gridLineColor: '#707073',
+            labels: {
+                style: {
+                    color: '#E0E0E3'
+                }
+            },
+            lineColor: '#707073',
+            minorGridLineColor: '#505053',
+            tickColor: '#707073',
+            tickWidth: 1,
+            title: {
+                style: {
+                    color: '#A0A0A3'
+                }
+            }
+        },
+        tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    color: '#F0F0F3',
+                    style: {
+                        fontSize: '13px'
+                    }
+                },
+                marker: {
+                    lineColor: '#333'
+                }
+            },
+            boxplot: {
+                fillColor: '#505053'
+            },
+            candlestick: {
+                lineColor: 'white'
+            },
+            errorbar: {
+                color: 'white'
+            }
+        },
+        legend: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            itemStyle: {
+                color: '#E0E0E3'
+            },
+            itemHoverStyle: {
+                color: '#FFF'
+            },
+            itemHiddenStyle: {
+                color: '#606063'
+            },
+            title: {
+                style: {
+                    color: '#C0C0C0'
+                }
+            }
+        },
+        credits: {
+            style: {
+                color: '#666'
+            }
+        },
+        labels: {
+            style: {
+                color: '#707073'
+            }
+        },
+        drilldown: {
+            activeAxisLabelStyle: {
+                color: '#F0F0F3'
+            },
+            activeDataLabelStyle: {
+                color: '#F0F0F3'
+            }
+        },
+        navigation: {
+            buttonOptions: {
+                symbolStroke: '#DDDDDD',
+                theme: {
+                    fill: '#505053'
+                }
+            }
+        },
+        // scroll charts
+        rangeSelector: {
+            buttonTheme: {
+                fill: '#505053',
+                stroke: '#000000',
+                style: {
+                    color: '#CCC'
+                },
+                states: {
+                    hover: {
+                        fill: '#707073',
+                        stroke: '#000000',
+                        style: {
+                            color: 'white'
+                        }
+                    },
+                    select: {
+                        fill: '#000003',
+                        stroke: '#000000',
+                        style: {
+                            color: 'white'
+                        }
+                    }
+                }
+            },
+            inputBoxBorderColor: '#505053',
+            inputStyle: {
+                backgroundColor: '#333',
+                color: 'silver'
+            },
+            labelStyle: {
+                color: 'silver'
+            }
+        },
+        navigator: {
+            handles: {
+                backgroundColor: '#666',
+                borderColor: '#AAA'
+            },
+            outlineColor: '#CCC',
+            maskFill: 'rgba(255,255,255,0.1)',
+            series: {
+                color: '#7798BF',
+                lineColor: '#A6C7ED'
+            },
+            xAxis: {
+                gridLineColor: '#505053'
+            }
+        },
+        scrollbar: {
+            barBackgroundColor: '#808083',
+            barBorderColor: '#808083',
+            buttonArrowColor: '#CCC',
+            buttonBackgroundColor: '#606063',
+            buttonBorderColor: '#606063',
+            rifleColor: '#FFF',
+            trackBackgroundColor: '#404043',
+            trackBorderColor: '#404043'
+        }
+    };
+
+    var mainOptions = {
+        chart: {
+            type: 'column',
+            options3d: {
+                enabled: true,
+                alpha: 10,
+                beta: 25,
+                depth: 90
+            }
+        },
+        title: {
+            text: 'Documentacion, 2020'
+        },
+        subtitle: {
+            text: 'Desarrollado por: productivebrains.com'
+        },
+        xAxis: {
+            categories: Highcharts.getOptions().lang.shortMonths,
+            labels: {
+                skew3d: true,
+                style: {
+                    fontSize: '16px'
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: null
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+        plotOptions: {
+            column: {
+                depth: 25
+            }
+        },
+        series: [{
+                name: 'Cartas Documentos',
+                data: [21, 32, null, 4, 0, 5, 1, 4, 6, 3]
+            },
+            {
+                name: 'Contestaciones',
+                data: [12, 11, null, 4, 0, 5, 1, 4, 6, 3]
+            },
+            {
+                name: 'Audiencias',
+                data: [2, 3, null, 4, 0, 5, 1, 4, 6, 3]
+            }
+        ],
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        },
+
+        colors: [
+            '#f59f00',
+            '#15aabf',
+            '#ff004c',
+
+        ]
+    }
+
+    </script>
+
+
+<script>
+    $(document).ready(function () {
+        console.log("ready!");
+        Highcharts.createElement('link', {
+            href: 'https://fonts.googleapis.com/css?family=Unica+One',
+            rel: 'stylesheet',
+            type: 'text/css'
+        }, null, document.getElementsByTagName('head')[0]);
+        chart = Highcharts.chart('grafico1', Highcharts.merge(mainOptions, darcUnica));
+        
+      
+        CargoGrafico1();
+        CargoGrafico2();
+
+        // cambio color de texto en el navbar para indicar visualmente la pagina activa
+        //Establezo un ID al navlink con el fin de captratno y cambiarle el color desde JS
+        document.getElementById('navlink_litigantes').style.color= 'YELLOW';
+    });
+</script>
+
+
+
+
+
+<%- include ("partials/_ajaxAnimation.ejs") %>
+<%- include ("partials/_footer") %>

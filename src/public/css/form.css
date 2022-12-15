@@ -1,0 +1,155 @@
+
+/* Espaciado entre lineas de inputs */
+.row {
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    margin: 0px;
+}
+body {
+    background-color: #7F7F7F
+}
+.card-action {
+    border-radius: 0 0 10px 10px !important;
+}
+
+.card .card-content {
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    border-radius: 0 0 2px 2px;
+}
+.caja {
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 1px rgba(73, 189, 232, 0.9);
+}
+.caja:hover {
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 1px rgba(250, 238, 72, 0.9);
+}
+.pb-CardHeader {
+    border-radius: 10px 10px 0 0;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px
+}
+.pb-bg-alta {
+    background: rgb(5, 82, 34);
+    background: linear-gradient(0deg, rgba(5, 82, 34, 1) 0%, rgba(9, 96, 25, 1) 67%, rgba(101, 219, 100, 1) 100%);
+    color: white;
+}
+.pb-Operario {
+    color: rgb(0, 0, 0);
+    padding-left: 10px;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+.pb-btnFooter {
+    border-radius: 5px;
+}
+.pb-btnFooter:hover {
+    border-radius: 10px;
+    color: rgba(242, 255, 4, 0.9);
+    box-shadow: 2px 2px 2px 1px rgba(73, 189, 232, 0.9);
+    font-weight: bold;
+}
+/* VER USO */
+.bg-header-lectura {
+    /* padding: 2px; */
+    background: rgb(5, 49, 82);
+    background: linear-gradient(0deg, rgb(5, 49, 82) 0%, rgb(9, 39, 96) 67%, rgb(100, 162, 219) 100%);
+    color: white;
+    text-align: left;
+    position: sticky;
+
+    padding-left: 10px;
+    height: 50px;
+
+    display: flex;
+    align-items: stretch;
+}
+
+.bg-header-actualizacion {
+    /* padding: 2px; */
+    background: rgb(82, 45, 5);
+    background: linear-gradient(0deg, rgb(82, 45, 5) 0%, rgb(96, 68, 9) 67%, rgb(217, 219, 100) 100%);
+    color: white;
+    text-align: left;
+    position: sticky;
+
+    padding-left: 10px;
+    height: 50px;
+
+    display: flex;
+    align-items: stretch;
+}
+hr.style-one {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}
+.input-field > label {
+	color: #083e13;
+}
+
+
+.input-field .prefix.active {
+    color: blue;
+}
+
+input:not([type]):focus:not([readonly]),
+input[type=text]:not(.browser-default):focus:not([readonly]),
+input[type=password]:not(.browser-default):focus:not([readonly]),
+input[type=email]:not(.browser-default):focus:not([readonly]),
+input[type=url]:not(.browser-default):focus:not([readonly]),
+input[type=time]:not(.browser-default):focus:not([readonly]),
+input[type=date]:not(.browser-default):focus:not([readonly]),
+input[type=datetime]:not(.browser-default):focus:not([readonly]),
+input[type=datetime-local]:not(.browser-default):focus:not([readonly]),
+input[type=tel]:not(.browser-default):focus:not([readonly]),
+input[type=number]:not(.browser-default):focus:not([readonly]),
+input[type=search]:not(.browser-default):focus:not([readonly]),
+textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 2px solid #d027d0;
+    -webkit-box-shadow: 0 1px 0 0 #26a69a;
+    /* box-shadow: 0 1px 0 0 #26a69a; */
+}
+
+input:not([type]):focus:not([readonly])+label,
+input[type=text]:not(.browser-default):focus:not([readonly])+label,
+input[type=password]:not(.browser-default):focus:not([readonly])+label,
+input[type=email]:not(.browser-default):focus:not([readonly])+label,
+input[type=url]:not(.browser-default):focus:not([readonly])+label,
+input[type=time]:not(.browser-default):focus:not([readonly])+label,
+input[type=date]:not(.browser-default):focus:not([readonly])+label,
+input[type=datetime]:not(.browser-default):focus:not([readonly])+label,
+input[type=datetime-local]:not(.browser-default):focus:not([readonly])+label,
+input[type=tel]:not(.browser-default):focus:not([readonly])+label,
+input[type=number]:not(.browser-default):focus:not([readonly])+label,
+input[type=search]:not(.browser-default):focus:not([readonly])+label,
+textarea.materialize-textarea:focus:not([readonly])+label {
+    color: #63014f;
+}
+input:not([type]):disabled + label, input:not([type])[readonly="readonly"] + label, input[type="text"]:not(.browser-default):disabled + label, input[type="text"]:not(.browser-default)[readonly="readonly"] + label, input[type="password"]:not(.browser-default):disabled + label, input[type="password"]:not(.browser-default)[readonly="readonly"] + label, input[type="email"]:not(.browser-default):disabled + label, input[type="email"]:not(.browser-default)[readonly="readonly"] + label, input[type="url"]:not(.browser-default):disabled + label, input[type="url"]:not(.browser-default)[readonly="readonly"] + label, input[type="time"]:not(.browser-default):disabled + label, input[type="time"]:not(.browser-default)[readonly="readonly"] + label, input[type="date"]:not(.browser-default):disabled + label, input[type="date"]:not(.browser-default)[readonly="readonly"] + label, input[type="datetime"]:not(.browser-default):disabled + label, input[type="datetime"]:not(.browser-default)[readonly="readonly"] + label, input[type="datetime-local"]:not(.browser-default):disabled + label, input[type="datetime-local"]:not(.browser-default)[readonly="readonly"] + label, input[type="tel"]:not(.browser-default):disabled + label, input[type="tel"]:not(.browser-default)[readonly="readonly"] + label, input[type="number"]:not(.browser-default):disabled + label, input[type="number"]:not(.browser-default)[readonly="readonly"] + label, input[type="search"]:not(.browser-default):disabled + label, input[type="search"]:not(.browser-default)[readonly="readonly"] + label, textarea.materialize-textarea:disabled + label, textarea.materialize-textarea[readonly="readonly"] + label {
+	color: rgba(138, 25, 25, 0.768);
+}
+input:not([type]):disabled, input:not([type])[readonly="readonly"], input[type="text"]:not(.browser-default):disabled, input[type="text"]:not(.browser-default)[readonly="readonly"], input[type="password"]:not(.browser-default):disabled, input[type="password"]:not(.browser-default)[readonly="readonly"], input[type="email"]:not(.browser-default):disabled, input[type="email"]:not(.browser-default)[readonly="readonly"], input[type="url"]:not(.browser-default):disabled, input[type="url"]:not(.browser-default)[readonly="readonly"], input[type="time"]:not(.browser-default):disabled, input[type="time"]:not(.browser-default)[readonly="readonly"], input[type="date"]:not(.browser-default):disabled, input[type="date"]:not(.browser-default)[readonly="readonly"], input[type="datetime"]:not(.browser-default):disabled, input[type="datetime"]:not(.browser-default)[readonly="readonly"], input[type="datetime-local"]:not(.browser-default):disabled, input[type="datetime-local"]:not(.browser-default)[readonly="readonly"], input[type="tel"]:not(.browser-default):disabled, input[type="tel"]:not(.browser-default)[readonly="readonly"], input[type="number"]:not(.browser-default):disabled, input[type="number"]:not(.browser-default)[readonly="readonly"], input[type="search"]:not(.browser-default):disabled, input[type="search"]:not(.browser-default)[readonly="readonly"], textarea.materialize-textarea:disabled, textarea.materialize-textarea[readonly="readonly"] {
+	color: rgba(138, 25, 25, 0.768);
+	border-bottom: 0;
+    font-weight: bold;
+}
+
+.input-field {
+    position: relative;
+    margin-top: 0 !important;
+    margin-bottom: 1rem;
+}
+
+html {
+    font-size: 14px;
+    /* line-height: 1.5; */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: normal;
+    color: rgba(32, 89, 117, 0.87);
+}
