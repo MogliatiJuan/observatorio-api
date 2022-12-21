@@ -16,7 +16,7 @@ var cors = require('cors');
 //Importando rutas
 const fallo_router = require('./routes/falloRouter');
 //Setting
-app.set('port', process.env.PORT || 3500);
+app.set('port', process.env.PORT || 3000);
 //Middlewares
 app.use(cors());
 app.use(morgan('dev'));
@@ -43,5 +43,5 @@ app.use('/fallo',fallo_router)
 
 //Iniciando el servidor
 app.listen(app.get('port'), () => {
-    console.log('Servidor activo en puerto 3500');
+    console.log('Servidor activo en puerto 3000');
 });
