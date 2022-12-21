@@ -38,7 +38,7 @@ app.use(multer({
 }).single('archivoupload')); //escucho jsons
 
 //Routes
-app.use('/fallo',fallo_router)
+app.use('/api/fallo',fallo_router)
 
 
 //Iniciando el servidor
