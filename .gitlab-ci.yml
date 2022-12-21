@@ -27,7 +27,7 @@ buildpush:
     - docker push $IMAGEN  
     - echo $IMAGEN 
   only:
-      - master 
+      - main 
 
 stopcontainer:
   stage: stopcontainer
@@ -43,7 +43,7 @@ stopcontainer:
     - echo ">>> PRUNE CONTAINERS <<<"
     - ssh $SERVER_PRO_USER@$SERVER_PRO "docker ps -a && docker rm -f $PROYECTO && docker ps -a"
   only:
-      - master  
+      - main  
 
 borrarimagen:
   stage: borrarimagen
@@ -64,8 +64,7 @@ borrarimagen:
     - $CMD_BORRAR
     - ssh $SERVER_PRO_USER@$SERVER_PRO "docker image ls"
   only:
-      - master  
-
+      - main  
 
 # CORREGIR EL HASH <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 deploy:
@@ -83,7 +82,7 @@ deploy:
     - echo $IMAGEN 
     - ssh $SERVER_PRO_USER@$SERVER_PRO "docker run -d -p $PORT_EXT:$PORT_INT --name $PROYECTO $IMAGEN"
   only:
-      - master    
+      - main    
 
 
 
