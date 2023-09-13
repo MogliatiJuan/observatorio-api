@@ -1,12 +1,11 @@
-const express = require ('express');
+import express from "express";
+import controller from "./controller_fallos.js";
+
 const router = express.Router();
-const controller = require('./controller_fallos');
 
-router.get('/', controller.all);
-router.get('/:id', controller.read);
+router.get("/", controller.all);
+router.get("/filtro/fallo", controller.readByFilter);
+router.get("/:id", controller.read);
+router.post("/", controller.create);
 
-router.post('/', controller.create);
-
-
-
-module.exports = router;
+export default router;
