@@ -12,6 +12,9 @@ const config = {
   DB_USERNAME: process.env.DB_USERNAME,
   DB_PASSWORD: process.env.DB_PASSWORD,
 
+  SEQUELIZE_SYNC_ALTER: process.env.SEQUELIZE_SYNC_ALTER || false,
+  LOGGING: process.env.LOGGING || false,
+
   MORGAN_FORMAT: process.env.MORGAN_FORMAT,
   MORGAN_LOGGING: process.env.MORGAN_LOGGING,
 };
