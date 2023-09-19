@@ -1,3 +1,12 @@
 export { default as Fallos } from "./Fallos/index.js";
 export { default as Empresas } from "./Empresas/index.js";
-export { default as Fallo_x_Empresa } from "./Fallo_Empresa/index.js";
+export { default as Fallo_x_Empresa } from "./Fallo_x_Empresa/index.js";
+export { default as Departamentos } from "./Departamentos/index.js";
+export { default as Juzgados } from "./Juzgados/index.js";
+export { default as Ciudades } from "./Ciudades/index.js";
+export { default as Tipo_Juicio } from "./Tipo_Juicio/index.js";
+export { default as Reclamos } from "./Reclamos/index.js";
+export { default as Provincias } from "./Provincias/index.js";
+export { default as Rubros } from "./Rubros/index.js";
+export { default as Etiquetas_x_Fallos } from "./Etiquetas_x_Fallo/index.js";
+export { default as Etiquetas } from "./Etiquetas/index.js";

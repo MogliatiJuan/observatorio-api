@@ -29,6 +29,7 @@ export const Empresas = sequelize.define(
   {
     tableName: "empresas",
     timestamps: false,
+    freezeTableName: true,
   }
 );
 
