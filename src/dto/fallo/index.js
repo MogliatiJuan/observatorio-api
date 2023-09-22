@@ -38,5 +38,9 @@ export class summaryVeredictDTO {
     data.Etiquetas.forEach((tag) => {
       this.etiquetas.push(tag.description);
     });
+    this.files = [];
+    data.Fallos_Archivos.forEach((file) => {
+      this.files.push({ file: file.filename, url: file.url });
+    });
   }
 }
