@@ -1,1 +1,1 @@
-export { default as __dirname } from "./dirname/index.js";
+export { default as catchHandler } from "./catchHandler/index.js";
