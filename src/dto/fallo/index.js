@@ -36,7 +36,7 @@ export class summaryVeredictDTO {
     this.resumen = data.summary || null;
     this.etiquetas = [];
     data.Etiquetas.forEach((tag) => {
-      this.etiquetas.push(tag.descriptionah);
+      this.etiquetas.push(tag.description);
     });
   }
 }

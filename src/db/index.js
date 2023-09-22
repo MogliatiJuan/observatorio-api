@@ -25,6 +25,7 @@ export const syncDb = async () => {
     await sequelize.sync({
       alter: SEQUELIZE_SYNC_ALTER === "true",
     });
+    console.log("Setted connection");
   } catch (error) {
     console.log(error);
   }
