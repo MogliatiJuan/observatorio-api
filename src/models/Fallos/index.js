@@ -4,7 +4,7 @@ import Juzgados from "../Juzgados/index.js";
 import Tipo_Juicio from "../Tipo_Juicio/index.js";
 import Reclamos from "../Reclamos/index.js";
 import Rubros from "../Rubros/index.js";
-import Empresas from "../Empresas/index.js";
+import Fallos_Archivos from "../Fallos_Archivos/index.js";
 
 export const Fallos = sequelize.define(
   "Fallo",
@@ -63,6 +63,6 @@ Fallos.belongsTo(Tipo_Juicio, { foreignKey: "tipojuicio" });
 Fallos.belongsTo(Reclamos, { foreignKey: "causas" });
 Fallos.belongsTo(Rubros, { foreignKey: "rubro" });
 Fallos.belongsTo(Juzgados, { foreignKey: "tribunalid" });
-Fallos.belongsTo(Reclamos, { foreignKey: "causas" });
+Fallos.hasMany(Fallos_Archivos, { foreignKey: "idFallo" });
 
 export default Fallos;
