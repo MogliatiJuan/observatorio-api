@@ -1,18 +1,17 @@
 import express from "express";
 import {
-  getAll,
+  getAllSinceProvince,
   getCities,
   getDepartments,
   getProvinces,
   getTribunals,
 } from "../../controllers/index.js";
-
 const router = express.Router();
 
 router.get("/ciudades", getCities);
 router.get("/provincias", getProvinces);
 router.get("/departamentos", getDepartments);
 router.get("/juzgados", getTribunals);
-router.get("/all", getAll);
+router.get("/all", getAllSinceProvince);
 
 export default router;

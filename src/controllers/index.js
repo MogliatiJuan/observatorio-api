@@ -5,7 +5,7 @@ export {
 } from "./fallos/index.js";
 
 export {
-  getAll,
+  getAllSinceProvince,
   getCities,
   getProvinces,
   getDepartments,
