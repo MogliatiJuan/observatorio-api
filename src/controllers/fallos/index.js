@@ -1,48 +1,57 @@
-import { summaryVeredictDTO } from "../../dto/fallo/index.js";
-import { CreateVeredictDTO } from "../../dto/index.js";
-import Juzgados from "../../models/Juzgados/index.js";
+import { errorHandler } from "../../constants/index.js";
+import { CreateVeredictDTO, summaryVeredictDTO } from "../../dto/index.js";
 import {
   Empresas,
   Etiquetas,
   Etiquetas_x_Fallos,
   Fallo_x_Empresa,
   Fallos,
+  Juzgados,
   Reclamos,
   Rubros,
   Tipo_Juicio,
 } from "../../models/index.js";
+import { catchHandler } from "../../utils/index.js";
 
 export const veredictById = async (req, res) => {
   try {
     const { id } = req.params;
-    const file = await Fallos.findByPk(id, {
-      include: [Juzgados, Tipo_Juicio, Reclamos, Rubros, Empresas, Etiquetas],
-    });
+    let file;
+
+    try {
+      file = await Fallos.findByPk(id, {
+        include: [Juzgados, Tipo_Juicio, Reclamos, Rubros, Empresas, Etiquetas],
+      });
+    } catch (error) {
+      throw { ...errorHandler.DATABASE, details: error?.message };
+    }
+
     if (!file) {
       return res.send([]);
     }
     res.send(new summaryVeredictDTO(file));
   } catch (error) {
-    res.send(error);
+    catchHandler(error, res);
   }
 };
 
 export const veredictsAllOrFiltered = async (req, res) => {
   try {
-    const { actor, demandado, rubro } = req.query;
-    const conditions = {};
-    const filesFormatted = [];
+    const { actor } = req.query;
+    const filesFormatted = [],
+      conditions = {};
+    let filesFiltered;
 
     actor && (conditions.agent = actor);
 
-    //reveer con nueva forma de traer los datos
-    //demandado && (conditions.defendant = demandado);
-    //rubro && (conditions.rubro = rubro);
-
-    const filesFiltered = await Fallos.findAll({
-      where: conditions,
-      include: [Juzgados, Tipo_Juicio, Reclamos, Rubros, Empresas, Etiquetas],
-    });
+    try {
+      filesFiltered = await Fallos.findAll({
+        where: conditions,
+        include: [Juzgados, Tipo_Juicio, Reclamos, Rubros, Empresas, Etiquetas],
+      });
+    } catch (error) {
+      throw { ...errorHandler.DATABASE, details: error?.message };
+    }
 
     filesFiltered.forEach((file) => {
       filesFormatted.push(new summaryVeredictDTO(file.dataValues));
@@ -50,46 +59,63 @@ export const veredictsAllOrFiltered = async (req, res) => {
 
     res.send(filesFormatted);
   } catch (error) {
-    res.send(error);
+    catchHandler(error, res);
   }
 };
 
 export const createVeredict = async (req, res) => {
   try {
     const { demandado = [], etiquetas = [] } = req.body;
+    let veredictCreated, falloConEmpresas;
 
     const newVeredict = new CreateVeredictDTO(req.body);
-    const veredictCreated = await Fallos.create(newVeredict);
+
+    try {
+      veredictCreated = await Fallos.create(newVeredict);
+    } catch (error) {
+      throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+    }
 
     if (demandado.length >= 1) {
-      await Promise.all(
-        demandado.map(async (id) => {
-          await Fallo_x_Empresa.create({
-            idFallo: veredictCreated.id,
-            idEmpresa: id,
-          });
-        })
-      );
+      try {
+        await Promise.all(
+          demandado.map(async (id) => {
+            await Fallo_x_Empresa.create({
+              idFallo: veredictCreated.id,
+              idEmpresa: id,
+            });
+          })
+        );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
     }
 
     if (etiquetas.length >= 1) {
-      await Promise.all(
-        etiquetas.map(async (tagId) => {
-          await Etiquetas_x_Fallos.create({
-            idFallo: veredictCreated.id,
-            idTags: tagId,
-          });
-        })
-      );
+      try {
+        await Promise.all(
+          etiquetas.map(async (tagId) => {
+            await Etiquetas_x_Fallos.create({
+              idFallo: veredictCreated.id,
+              idTags: tagId,
+            });
+          })
+        );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
     }
 
-    const falloConEmpresas = await Fallos.findByPk(veredictCreated.id, {
-      include: [Juzgados, Tipo_Juicio, Reclamos, Rubros, Empresas, Etiquetas],
-    });
+    try {
+      falloConEmpresas = await Fallos.findByPk(veredictCreated.id, {
+        include: [Juzgados, Tipo_Juicio, Reclamos, Rubros, Empresas, Etiquetas],
+      });
+    } catch (error) {
+      throw { ...errorHandler.DATABASE, details: error?.message };
+    }
 
     res.send(new summaryVeredictDTO(falloConEmpresas));
   } catch (error) {
-    console.log(error);
-    res.send(error);
+    catchHandler(error, res);
   }
 };

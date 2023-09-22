@@ -10,12 +10,11 @@ syncDb();
 const app = express();
 
 app.use("*", cors());
-app.use(express.urlencoded({ extends: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 if (config.MORGAN_LOGGING) {
   app.use(morgan(config.MORGAN_FORMAT));
 }
-
 app.use("/api", router);
 
 app.listen(config.PORT, () => {
