@@ -56,6 +56,13 @@ const errorHandler = {
     id_required: "El campo 'id' es requerido",
     tribunals_required:
       "Falta enviar algún dato relacionado a ciudad o departamento",
+    updated_register: "Ningun registro fue actualizado",
+    description_required: "El campo 'descripcion' es necesario",
+    rubro_required: "El campo 'rubro' es necesario",
+    data_not_found:
+      "El dato no se encuentra en los registros o el dato a modificar tiene registrado el mismo valor",
+    create_tribunal:
+      "Los campos 'nombre', 'idDepartamento' y 'idCiudad' son necesarios para crear un nuevo juzgado",
   },
 };
 export default errorHandler;
