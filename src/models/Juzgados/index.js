@@ -14,7 +14,7 @@ export const Juzgados = sequelize.define(
     },
     id_tipo: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     nombre: {
       type: DataTypes.STRING(255),
@@ -30,11 +30,11 @@ export const Juzgados = sequelize.define(
     },
     juez: {
       type: DataTypes.STRING(64),
-      allowNull: false,
+      allowNull: true,
     },
     estado: {
       type: DataTypes.TINYINT,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
