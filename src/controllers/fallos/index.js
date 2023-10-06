@@ -228,7 +228,7 @@ export const createVeredict = async (req, res) => {
         }
 
         try {
-          newFile = await Fallos_Archivos.create({
+          await Fallos_Archivos.create({
             idFallo: veredictCreated.id,
             filename,
           });
