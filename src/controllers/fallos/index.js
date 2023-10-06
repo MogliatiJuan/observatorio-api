@@ -92,7 +92,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
         where: demandado
           ? {
               id: {
-                [Op.or]: demandado,
+                [Op.and]: demandado,
               },
             }
           : {},
@@ -102,7 +102,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
         where: etiquetas
           ? {
               id: {
-                [Op.or]: etiquetas,
+                [Op.and]: etiquetas,
               },
             }
           : {},
