@@ -22,6 +22,8 @@ import { catchHandler } from "../../utils/index.js";
 import ftp from "basic-ftp";
 import config from "../../config/index.js";
 import sharp from "sharp";
+import { Op } from "sequelize";
+import moment from "moment/moment.js";
 
 export const veredictById = async (req, res) => {
   try {
@@ -60,36 +62,66 @@ export const veredictById = async (req, res) => {
 
 export const veredictsAllOrFiltered = async (req, res) => {
   try {
-    const { actor } = req.query;
-    const filesFormatted = [],
-      conditions = {};
-    let filesFiltered;
+    const {
+      actor,
+      rubro,
+      demandado = null,
+      fecha,
+      etiquetas = null,
+      tipoJuicio,
+      causas = null,
+      idTribunal,
+    } = req.body;
+
+    const conditions = {};
 
     actor && (conditions.agent = actor);
+    rubro && (conditions.rubro = rubro);
+    fecha && (conditions.fecha = moment(fecha, "DD-MM-YYYY").toDate());
+    tipoJuicio && (conditions.tipojuicio = tipoJuicio);
+    causas && (conditions.causas = causas);
+    idTribunal && (conditions.tribunalid = parseInt(idTribunal));
 
-    try {
-      filesFiltered = await Fallos.findAll({
-        where: conditions,
-        include: [
-          Juzgados,
-          Tipo_Juicio,
-          Reclamos,
-          Rubros,
-          Empresas,
-          Etiquetas,
-          Fallos_Archivos,
-        ],
-      });
-    } catch (error) {
-      throw { ...errorHandler.DATABASE, details: error?.message };
-    }
+    const include = [
+      Juzgados,
+      Tipo_Juicio,
+      Reclamos,
+      Rubros,
+      {
+        model: Empresas,
+        where: demandado
+          ? {
+              id: {
+                [Op.or]: demandado,
+              },
+            }
+          : {},
+      },
+      {
+        model: Etiquetas,
+        where: etiquetas
+          ? {
+              id: {
+                [Op.or]: etiquetas,
+              },
+            }
+          : {},
+      },
+      Fallos_Archivos,
+    ];
 
-    filesFiltered.forEach((file) => {
-      file.Fallos_Archivos &&
+    const filesFiltered = await Fallos.findAll({
+      where: conditions,
+      include,
+    });
+
+    const filesFormatted = filesFiltered.map((file) => {
+      if (file.Fallos_Archivos) {
         file.Fallos_Archivos.forEach((fileFallo) => {
           fileFallo.url = `${ftpStaticFolderUrl}/observatorio/fallos/${file.id}/${fileFallo.filename}`;
         });
-      filesFormatted.push(new summaryVeredictDTO(file.dataValues));
+      }
+      return new summaryVeredictDTO(file.dataValues);
     });
 
     res.send(filesFormatted);
@@ -103,7 +135,7 @@ export const createVeredict = async (req, res) => {
   client.ftp.verbose = true;
   try {
     let { demandado = [], etiquetas = [] } = req.body;
-    let veredictCreated, falloConEmpresas, newFile;
+    let veredictCreated, falloConEmpresas;
 
     demandado = JSON.parse(req.body.demandado);
     etiquetas = JSON.parse(req.body.etiquetas);
