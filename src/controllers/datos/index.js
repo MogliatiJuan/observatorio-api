@@ -114,8 +114,12 @@ export const getDepartments = async (req, res) => {
 
 export const getFactories = async (req, res) => {
   try {
-    const { cuit, page = 1, offset = 10 } = req.query;
+    const { cuit, page, offset } = req.query;
 
+    if (!cuit && !page && !offset) {
+      const allFactories = await Empresas.findAll();
+      return res.send(allFactories);
+    }
     if (!cuit) {
       const allFactories = await Empresas.findAndCountAll({
         limit: +offset,

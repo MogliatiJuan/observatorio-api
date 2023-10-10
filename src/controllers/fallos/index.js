@@ -71,7 +71,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
       tipoJuicio,
       causas = null,
       idTribunal,
-    } = req.body;
+    } = req.query;
 
     const conditions = {};
 
@@ -89,23 +89,11 @@ export const veredictsAllOrFiltered = async (req, res) => {
       Rubros,
       {
         model: Empresas,
-        where: demandado
-          ? {
-              id: {
-                [Op.and]: demandado,
-              },
-            }
-          : {},
+        where: demandado && { id: demandado },
       },
       {
         model: Etiquetas,
-        where: etiquetas
-          ? {
-              id: {
-                [Op.and]: etiquetas,
-              },
-            }
-          : {},
+        where: etiquetas && { id: etiquetas },
       },
       Fallos_Archivos,
     ];
