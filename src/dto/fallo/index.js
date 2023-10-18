@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from "../../utils/index.js";
+
 export class CreateVeredictDTO {
   constructor(data) {
     this.agent = data.actor || null;
@@ -17,7 +19,7 @@ export class CreateVeredictDTO {
 export class summaryVeredictDTO {
   constructor(data) {
     this.nroExpediente = data.id || null;
-    this.actor = data.agent || null;
+    this.actor = capitalizeFirstLetter(data.agent) || null;
     this.demandado = [];
     data.Empresas.forEach((empresa) => {
       this.demandado.push({
@@ -25,18 +27,19 @@ export class summaryVeredictDTO {
         cuit: empresa.cuit,
       });
     });
-    this.tipoJuicio = data.Tipo_Juicio.description || null;
+    this.tipoJuicio =
+      capitalizeFirstLetter(data.Tipo_Juicio.description) || null;
     this.causas = data.Reclamo.description || null;
-    this.juzgado = data.Juzgado.nombre || null;
-    this.rubro = data.Rubro.rubro || null;
+    this.juzgado = capitalizeFirstLetter(data.Juzgado.nombre) || null;
+    this.rubro = capitalizeFirstLetter(data.Rubro.rubro) || null;
     this.fecha = data.fecha || null;
     this.punitivo = data.punitive || null;
     this.moral = data.moral || null;
     this.patrimonial = data.patrimonial || null;
-    this.resumen = data.summary || null;
+    this.resumen = capitalizeFirstLetter(data.summary) || null;
     this.etiquetas = [];
     data.Etiquetas.forEach((tag) => {
-      this.etiquetas.push(tag.description);
+      this.etiquetas.push(capitalizeFirstLetter(tag.description));
     });
     this.files = [];
     data.Fallos_Archivos.forEach((file) => {
