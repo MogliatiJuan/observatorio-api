@@ -114,26 +114,20 @@ export const getDepartments = async (req, res) => {
 
 export const getFactories = async (req, res) => {
   try {
-    const { cuit, page, offset } = req.query;
+    const { cuit = null } = req.query;
 
-    if (!cuit && !page && !offset) {
+    if (!cuit) {
       const allFactories = await Empresas.findAll();
       return res.send(allFactories);
-    }
-    if (!cuit) {
-      const allFactories = await Empresas.findAndCountAll({
-        limit: +offset,
-        offset: +offset * (+page - 1),
-      });
-      const factories = {
-        currentPage: +page,
-        totalPages: Math.ceil(allFactories.count / offset),
-        totalRows: allFactories.count,
-        data: allFactories.rows,
-      };
-      return res.send(factories);
     } else {
       const factory = await Empresas.findOne({ where: { cuit: +cuit } });
+
+      if (!factory) {
+        throw {
+          ...errorHandler.DATA_NOT_FOUND,
+          details: errorHandler.MESSAGES.data_not_found,
+        };
+      }
       return res.send(factory);
     }
   } catch (error) {
