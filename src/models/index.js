@@ -11,3 +11,4 @@ export { default as Rubros } from "./Rubros/index.js";
 export { default as Etiquetas_x_Fallos } from "./Etiquetas_x_Fallo/index.js";
 export { default as Etiquetas } from "./Etiquetas/index.js";
 export { default as Fallos_Archivos } from "./Fallos_Archivos/index.js";
+export { default as Reclamos_x_Fallo } from "./Reclamos_x_Fallo/index.js";
