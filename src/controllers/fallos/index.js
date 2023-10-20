@@ -15,6 +15,7 @@ import {
   Fallos_Archivos,
   Juzgados,
   Reclamos,
+  Reclamos_x_Fallo,
   Rubros,
   Tipo_Juicio,
 } from "../../models/index.js";
@@ -22,7 +23,6 @@ import { catchHandler } from "../../utils/index.js";
 import ftp from "basic-ftp";
 import config from "../../config/index.js";
 import sharp from "sharp";
-import { Op } from "sequelize";
 import moment from "moment/moment.js";
 
 export const veredictById = async (req, res) => {
@@ -71,21 +71,22 @@ export const veredictsAllOrFiltered = async (req, res) => {
       tipoJuicio,
       causas = null,
       idTribunal,
+      page = 1,
+      offset = 10,
     } = req.query;
 
     const conditions = {};
 
     actor && (conditions.agent = actor);
     rubro && (conditions.rubro = rubro);
-    fecha && (conditions.fecha = moment(fecha, "DD-MM-YYYY").toDate());
+    fecha && (conditions.fecha = moment(fecha, "DD-MM-YYYY"));
     tipoJuicio && (conditions.tipojuicio = tipoJuicio);
-    causas && (conditions.causas = causas);
     idTribunal && (conditions.tribunalid = parseInt(idTribunal));
 
     const include = [
       Juzgados,
       Tipo_Juicio,
-      Reclamos,
+      { model: Reclamos, where: causas && { id: causas } },
       Rubros,
       {
         model: Empresas,
@@ -98,12 +99,20 @@ export const veredictsAllOrFiltered = async (req, res) => {
       Fallos_Archivos,
     ];
 
-    const filesFiltered = await Fallos.findAll({
+    //pagination
+    const filesFiltered = await Fallos.findAndCountAll({
+      limit: +offset,
+      offset: (+page - 1) * +offset,
       where: conditions,
       include,
     });
 
-    const filesFormatted = filesFiltered.map((file) => {
+    //'cause pagination counts duplicate rows, use '.count'
+    const totalRows = await Fallos.count({
+      where: conditions,
+    });
+
+    const filesFormatted = filesFiltered.rows.map((file) => {
       if (file.Fallos_Archivos) {
         file.Fallos_Archivos.forEach((fileFallo) => {
           fileFallo.url = `${ftpStaticFolderUrl}/observatorio/fallos/${file.id}/${fileFallo.filename}`;
@@ -112,7 +121,12 @@ export const veredictsAllOrFiltered = async (req, res) => {
       return new summaryVeredictDTO(file.dataValues);
     });
 
-    res.send(filesFormatted);
+    res.send({
+      totalRows,
+      totalPages: Math.ceil(totalRows / +offset),
+      currentPage: +page,
+      data: filesFormatted,
+    });
   } catch (error) {
     catchHandler(error, res);
   }
@@ -122,11 +136,12 @@ export const createVeredict = async (req, res) => {
   const client = new ftp.Client();
   client.ftp.verbose = true;
   try {
-    let { demandado = [], etiquetas = [] } = req.body;
+    let { demandado = [], etiquetas = [], causas = [] } = req.body;
     let veredictCreated, falloConEmpresas;
 
     demandado = JSON.parse(req.body.demandado);
     etiquetas = JSON.parse(req.body.etiquetas);
+    causas = JSON.parse(req.body.causas);
 
     const newVeredict = new CreateVeredictDTO(req.body);
 
@@ -158,6 +173,21 @@ export const createVeredict = async (req, res) => {
             await Etiquetas_x_Fallos.create({
               idFallo: veredictCreated.id,
               idTags: tagId,
+            });
+          })
+        );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    }
+
+    if (causas.length >= 1) {
+      try {
+        await Promise.all(
+          causas.map(async (idCausa) => {
+            await Reclamos_x_Fallo.create({
+              idFallo: veredictCreated.id,
+              idReclamo: idCausa,
             });
           })
         );

@@ -29,7 +29,6 @@ export class summaryVeredictDTO {
     });
     this.tipoJuicio =
       capitalizeFirstLetter(data.Tipo_Juicio.description) || null;
-    this.causas = data.Reclamo.description || null;
     this.juzgado = capitalizeFirstLetter(data.Juzgado.nombre) || null;
     this.rubro = capitalizeFirstLetter(data.Rubro.rubro) || null;
     this.fecha = data.fecha || null;
@@ -37,6 +36,10 @@ export class summaryVeredictDTO {
     this.moral = data.moral || null;
     this.patrimonial = data.patrimonial || null;
     this.resumen = capitalizeFirstLetter(data.summary) || null;
+    this.causas = [];
+    data.Reclamos.forEach((rec) => {
+      this.causas.push(capitalizeFirstLetter(rec.description));
+    });
     this.etiquetas = [];
     data.Etiquetas.forEach((tag) => {
       this.etiquetas.push(capitalizeFirstLetter(tag.description));
