@@ -139,12 +139,19 @@ export const createVeredict = async (req, res) => {
     let { demandado = [], etiquetas = [], causas = [] } = req.body;
     let veredictCreated, falloConEmpresas;
 
-    demandado = JSON.parse(req.body.demandado);
-    etiquetas = JSON.parse(req.body.etiquetas);
-    causas = JSON.parse(req.body.causas);
+    if (!Array.isArray(demandado)) {
+      demandado = [demandado];
+    }
+
+    if (!Array.isArray(etiquetas)) {
+      etiquetas = [etiquetas];
+    }
+
+    if (!Array.isArray(causas)) {
+      causas = [causas];
+    }
 
     const newVeredict = new CreateVeredictDTO(req.body);
-
     try {
       veredictCreated = await Fallos.create(newVeredict);
     } catch (error) {
@@ -278,6 +285,7 @@ export const createVeredict = async (req, res) => {
 
     res.send(new summaryVeredictDTO(falloConEmpresas));
   } catch (error) {
+    console.log("error->", error);
     catchHandler(error, res);
   } finally {
     client.close();

@@ -4,11 +4,9 @@ export class CreateVeredictDTO {
   constructor(data) {
     this.agent = data.actor || null;
     this.tipojuicio = data.tipoJuicio || null;
-    this.causas = data.causas || null;
     this.rubro = data.rubro || null;
     this.fecha = data.fecha || null;
     this.tribunalid = data.idTribunal || null;
-    this.tribunal = data.tribunal || null;
     this.punitive = data.punitivo || null;
     this.moral = data.moral || null;
     this.patrimonial = data.patrimonial || null;
