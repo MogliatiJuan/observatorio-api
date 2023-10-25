@@ -105,11 +105,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
       offset: (+page - 1) * +offset,
       where: conditions,
       include,
-    });
-
-    //'cause pagination counts duplicate rows, use '.count'
-    const totalRows = await Fallos.count({
-      where: conditions,
+      distinct: true,
     });
 
     const filesFormatted = filesFiltered.rows.map((file) => {
@@ -122,8 +118,8 @@ export const veredictsAllOrFiltered = async (req, res) => {
     });
 
     res.send({
-      totalRows,
-      totalPages: Math.ceil(totalRows / +offset),
+      totalRows: filesFiltered.count,
+      totalPages: Math.ceil(filesFiltered.count / +offset),
       currentPage: +page,
       data: filesFormatted,
     });
