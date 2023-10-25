@@ -1,3 +1,4 @@
+import moment from "moment";
 import { capitalizeFirstLetter } from "../../utils/index.js";
 
 export class CreateVeredictDTO {
@@ -29,7 +30,7 @@ export class summaryVeredictDTO {
       capitalizeFirstLetter(data.Tipo_Juicio.description) || null;
     this.juzgado = capitalizeFirstLetter(data.Juzgado.nombre) || null;
     this.rubro = capitalizeFirstLetter(data.Rubro.rubro) || null;
-    this.fecha = data.fecha || null;
+    this.fecha = moment(data.fecha).format("DD/MM/YYYY") || null;
     this.punitivo = data.punitive || null;
     this.moral = data.moral || null;
     this.patrimonial = data.patrimonial || null;
