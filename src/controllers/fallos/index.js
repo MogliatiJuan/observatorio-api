@@ -1,62 +1,293 @@
-import { CreateVeredictDTO } from "../../dto/index.js";
-import { Empresas, Fallo_x_Empresa, Fallos } from "../../models/index.js";
+import { Readable } from "stream";
+import {
+  errorHandler,
+  ftpStaticFolderUrl,
+  mimetypePdf,
+  sizeBytes,
+} from "../../constants/index.js";
+import { CreateVeredictDTO, summaryVeredictDTO } from "../../dto/index.js";
+import {
+  Empresas,
+  Etiquetas,
+  Etiquetas_x_Fallos,
+  Fallo_x_Empresa,
+  Fallos,
+  Fallos_Archivos,
+  Juzgados,
+  Reclamos,
+  Reclamos_x_Fallo,
+  Rubros,
+  Tipo_Juicio,
+} from "../../models/index.js";
+import { catchHandler } from "../../utils/index.js";
+import ftp from "basic-ftp";
+import config from "../../config/index.js";
+import sharp from "sharp";
+import moment from "moment/moment.js";
 
 export const veredictById = async (req, res) => {
   try {
     const { id } = req.params;
-    const file = await Fallos.findByPk(id, { include: Empresas });
+    let file;
+
+    try {
+      file = await Fallos.findByPk(id, {
+        include: [
+          Juzgados,
+          Tipo_Juicio,
+          Reclamos,
+          Rubros,
+          Empresas,
+          Etiquetas,
+          Fallos_Archivos,
+        ],
+      });
+    } catch (error) {
+      throw { ...errorHandler.DATABASE, details: error?.message };
+    }
+
     if (!file) {
       return res.send([]);
     }
-    res.send(file);
+
+    file.Fallos_Archivos.forEach((fileFallo) => {
+      fileFallo.url = `${ftpStaticFolderUrl}/observatorio/fallos/${file.id}/${fileFallo.filename}`;
+    });
+
+    res.send(new summaryVeredictDTO(file));
   } catch (error) {
-    res.send(error);
+    catchHandler(error, res);
   }
 };
 
 export const veredictsAllOrFiltered = async (req, res) => {
   try {
-    const { actor, demandado, rubro } = req.query;
+    const {
+      actor,
+      rubro,
+      demandado = null,
+      fecha,
+      etiquetas = null,
+      tipoJuicio,
+      causas = null,
+      idTribunal,
+      page = 1,
+      offset = 10,
+    } = req.query;
+
     const conditions = {};
 
     actor && (conditions.agent = actor);
-    demandado && (conditions.defendant = demandado);
     rubro && (conditions.rubro = rubro);
+    fecha && (conditions.fecha = moment(fecha, "DD-MM-YYYY"));
+    tipoJuicio && (conditions.tipojuicio = tipoJuicio);
+    idTribunal && (conditions.tribunalid = parseInt(idTribunal));
 
-    const filesFiltered = await Fallos.findAll({
+    const include = [
+      Juzgados,
+      Tipo_Juicio,
+      { model: Reclamos, where: causas && { id: causas } },
+      Rubros,
+      {
+        model: Empresas,
+        where: demandado && { id: demandado },
+      },
+      {
+        model: Etiquetas,
+        where: etiquetas && { id: etiquetas },
+      },
+      Fallos_Archivos,
+    ];
+
+    //pagination
+    const filesFiltered = await Fallos.findAndCountAll({
+      limit: +offset,
+      offset: (+page - 1) * +offset,
+      where: conditions,
+      include,
+    });
+
+    //'cause pagination counts duplicate rows, use '.count'
+    const totalRows = await Fallos.count({
       where: conditions,
     });
 
-    res.send(filesFiltered);
+    const filesFormatted = filesFiltered.rows.map((file) => {
+      if (file.Fallos_Archivos) {
+        file.Fallos_Archivos.forEach((fileFallo) => {
+          fileFallo.url = `${ftpStaticFolderUrl}/observatorio/fallos/${file.id}/${fileFallo.filename}`;
+        });
+      }
+      return new summaryVeredictDTO(file.dataValues);
+    });
+
+    res.send({
+      totalRows,
+      totalPages: Math.ceil(totalRows / +offset),
+      currentPage: +page,
+      data: filesFormatted,
+    });
   } catch (error) {
-    res.send(error);
+    catchHandler(error, res);
   }
 };
 
 export const createVeredict = async (req, res) => {
+  const client = new ftp.Client();
+  client.ftp.verbose = true;
   try {
-    const { idEmpresa = [] } = req.body;
+    let { demandado = [], etiquetas = [], causas = [] } = req.body;
+    let veredictCreated, falloConEmpresas;
 
-    const newVeredict = new CreateVeredictDTO(req.body);
-    const veredictCreated = await Fallos.create(newVeredict);
-
-    if (idEmpresa.length >= 1) {
-      await Promise.all(
-        idEmpresa.map(async (id) => {
-          await Fallo_x_Empresa.create({
-            idFallo: veredictCreated.id,
-            idEmpresa: id,
-          });
-        })
-      );
+    if (!Array.isArray(demandado)) {
+      demandado = [demandado];
     }
 
-    const falloConEmpresas = await Fallos.findByPk(veredictCreated.id, {
-      include: Empresas,
+    if (!Array.isArray(etiquetas)) {
+      etiquetas = [etiquetas];
+    }
+
+    if (!Array.isArray(causas)) {
+      causas = [causas];
+    }
+
+    const newVeredict = new CreateVeredictDTO(req.body);
+    try {
+      veredictCreated = await Fallos.create(newVeredict);
+    } catch (error) {
+      throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+    }
+
+    if (demandado.length >= 1) {
+      try {
+        await Promise.all(
+          demandado.map(async (id) => {
+            await Fallo_x_Empresa.create({
+              idFallo: veredictCreated.id,
+              idEmpresa: id,
+            });
+          })
+        );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    }
+
+    if (etiquetas.length >= 1) {
+      try {
+        await Promise.all(
+          etiquetas.map(async (tagId) => {
+            await Etiquetas_x_Fallos.create({
+              idFallo: veredictCreated.id,
+              idTags: tagId,
+            });
+          })
+        );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    }
+
+    if (causas.length >= 1) {
+      try {
+        await Promise.all(
+          causas.map(async (idCausa) => {
+            await Reclamos_x_Fallo.create({
+              idFallo: veredictCreated.id,
+              idReclamo: idCausa,
+            });
+          })
+        );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    }
+
+    try {
+      await client.access({
+        host: config.FTP_HOST,
+        user: config.FTP_USER,
+        password: config.FTP_PASSWORD,
+      });
+    } catch (error) {
+      throw { ...errorHandler.FTP, details: error?.message };
+    }
+
+    const basePath = `/public_html/images-observatorio/observatorio/fallos/${veredictCreated.id}`;
+
+    try {
+      await client.ensureDir(basePath);
+    } catch (error) {
+      throw { ...errorHandler.FTP_DIR, details: error?.message };
+    }
+
+    const files = Object.entries(req.files);
+
+    for (let [_key, value] of files) {
+      if (!Array.isArray(value)) {
+        value = [value];
+      }
+
+      for (let file of value) {
+        let buffer;
+        if (file.size < sizeBytes || file.mimetype === mimetypePdf) {
+          buffer = file.data;
+        } else {
+          buffer = await sharp(file.data)
+            .resize(800, 800, { fit: "inside" })
+            .sharpen()
+            .toBuffer();
+        }
+
+        const readableStreamPoder = Readable.from(buffer);
+        const filename = `${veredictCreated.id}_${Date.now()}.${
+          file.name.split(".")[file.name.split(".").length - 1]
+        }`;
+        try {
+          await client.uploadFrom(
+            readableStreamPoder,
+            `${basePath}/${filename}`
+          );
+        } catch (error) {
+          throw { ...errorHandler.FTP_UPLOAD, details: error?.message };
+        }
+
+        try {
+          await Fallos_Archivos.create({
+            idFallo: veredictCreated.id,
+            filename,
+          });
+        } catch (error) {
+          throw { ...errorHandler.DATABASE, details: error?.message };
+        }
+      }
+    }
+
+    try {
+      falloConEmpresas = await Fallos.findByPk(veredictCreated.id, {
+        include: [
+          Juzgados,
+          Tipo_Juicio,
+          Reclamos,
+          Rubros,
+          Empresas,
+          Etiquetas,
+          Fallos_Archivos,
+        ],
+      });
+    } catch (error) {
+      throw { ...errorHandler.DATABASE, details: error?.message };
+    }
+
+    falloConEmpresas.Fallos_Archivos.forEach((file) => {
+      file.url = `${ftpStaticFolderUrl}/observatorio/fallos/${veredictCreated.id}/${file.filename}`;
     });
 
-    res.send(falloConEmpresas);
+    res.send(new summaryVeredictDTO(falloConEmpresas));
   } catch (error) {
-    res.send(error);
+    console.log("error->", error);
+    catchHandler(error, res);
+  } finally {
+    client.close();
   }
 };

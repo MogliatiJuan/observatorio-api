@@ -1,6 +1,10 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/index.js";
-import moment from "moment/moment.js";
+import Juzgados from "../Juzgados/index.js";
+import Tipo_Juicio from "../Tipo_Juicio/index.js";
+import Reclamos from "../Reclamos/index.js";
+import Rubros from "../Rubros/index.js";
+import Fallos_Archivos from "../Fallos_Archivos/index.js";
 
 export const Fallos = sequelize.define(
   "Fallo",
@@ -16,31 +20,19 @@ export const Fallos = sequelize.define(
       allowNull: false,
     },
     tipojuicio: {
-      type: DataTypes.STRING(30),
-      allowNull: false,
-    },
-    causas: {
-      type: DataTypes.STRING(60),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     rubro: {
-      type: DataTypes.STRING(30),
-      allowNull: false,
-    },
-    defendant: {
-      type: DataTypes.STRING(60),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     fecha: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     tribunalid: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    tribunal: {
-      type: DataTypes.STRING(60),
       allowNull: false,
     },
     punitive: {
@@ -62,5 +54,10 @@ export const Fallos = sequelize.define(
     freezeTableName: true,
   }
 );
+
+Fallos.belongsTo(Tipo_Juicio, { foreignKey: "tipojuicio" });
+Fallos.belongsTo(Rubros, { foreignKey: "rubro" });
+Fallos.belongsTo(Juzgados, { foreignKey: "tribunalid" });
+Fallos.hasMany(Fallos_Archivos, { foreignKey: "idFallo" });
 
 export default Fallos;

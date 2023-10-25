@@ -20,15 +20,17 @@ export const Empresas = sequelize.define(
     },
     direccion: {
       type: DataTypes.STRING(66),
-      allowNull: false,
+      allowNull: true,
     },
     servicio: {
       type: DataTypes.STRING(77),
+      allowNull: true,
     },
   },
   {
     tableName: "empresas",
     timestamps: false,
+    freezeTableName: true,
   }
 );
 

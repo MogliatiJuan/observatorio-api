@@ -15,6 +15,8 @@ export const Fallo_Empresa = sequelize.define(
   },
   {
     tableName: "fallo_x_empresa",
+    freezeTableName: true,
+    timestamps: false,
   }
 );
 

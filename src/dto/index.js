@@ -1,1 +1,1 @@
-export { CreateVeredictDTO } from "./fallo/index.js";
+export { CreateVeredictDTO, summaryVeredictDTO } from "./fallo/index.js";
