@@ -23,10 +23,6 @@ export const Fallos = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    rubro: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     fecha: {
       type: DataTypes.DATEONLY,
       allowNull: false,
@@ -45,7 +41,7 @@ export const Fallos = sequelize.define(
       type: DataTypes.DECIMAL(11, 2),
     },
     summary: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(600),
     },
   },
   {
@@ -56,7 +52,6 @@ export const Fallos = sequelize.define(
 );
 
 Fallos.belongsTo(Tipo_Juicio, { foreignKey: "tipojuicio" });
-Fallos.belongsTo(Rubros, { foreignKey: "rubro" });
 Fallos.belongsTo(Juzgados, { foreignKey: "tribunalid" });
 Fallos.hasMany(Fallos_Archivos, { foreignKey: "idFallo" });
 
