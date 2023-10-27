@@ -17,6 +17,7 @@ import {
   Reclamos,
   Reclamos_x_Fallo,
   Rubros,
+  Rubros_x_Fallos,
   Tipo_Juicio,
 } from "../../models/index.js";
 import { catchHandler } from "../../utils/index.js";
@@ -64,7 +65,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
   try {
     const {
       actor,
-      rubro,
+      rubro = null,
       demandado = null,
       fecha,
       etiquetas = null,
@@ -78,7 +79,6 @@ export const veredictsAllOrFiltered = async (req, res) => {
     const conditions = {};
 
     actor && (conditions.agent = actor);
-    rubro && (conditions.rubro = rubro);
     fecha && (conditions.fecha = moment(fecha, "DD-MM-YYYY"));
     tipoJuicio && (conditions.tipojuicio = tipoJuicio);
     idTribunal && (conditions.tribunalid = parseInt(idTribunal));
@@ -87,7 +87,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
       Juzgados,
       Tipo_Juicio,
       { model: Reclamos, where: causas && { id: causas } },
-      Rubros,
+      { model: Rubros, where: rubro && { id: rubro } },
       {
         model: Empresas,
         where: demandado && { id: demandado },
@@ -132,7 +132,7 @@ export const createVeredict = async (req, res) => {
   const client = new ftp.Client();
   client.ftp.verbose = true;
   try {
-    let { demandado = [], etiquetas = [], causas = [] } = req.body;
+    let { demandado = [], etiquetas = [], causas = [], rubro = [] } = req.body;
     let veredictCreated, falloConEmpresas;
 
     if (!Array.isArray(demandado)) {
@@ -145,6 +145,10 @@ export const createVeredict = async (req, res) => {
 
     if (!Array.isArray(causas)) {
       causas = [causas];
+    }
+
+    if (!Array.isArray(rubro)) {
+      rubro = [rubro];
     }
 
     const newVeredict = new CreateVeredictDTO(req.body);
@@ -191,6 +195,21 @@ export const createVeredict = async (req, res) => {
             await Reclamos_x_Fallo.create({
               idFallo: veredictCreated.id,
               idReclamo: idCausa,
+            });
+          })
+        );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    }
+
+    if (rubro.length >= 1) {
+      try {
+        await Promise.all(
+          rubro.map(async (idRubro) => {
+            await Rubros_x_Fallos.create({
+              idFallo: veredictCreated.id,
+              idRubro: idRubro,
             });
           })
         );

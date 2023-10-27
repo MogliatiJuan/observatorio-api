@@ -5,7 +5,6 @@ export class CreateVeredictDTO {
   constructor(data) {
     this.agent = data.actor || null;
     this.tipojuicio = data.tipoJuicio || null;
-    this.rubro = data.rubro || null;
     this.fecha = data.fecha || null;
     this.tribunalid = data.idTribunal || null;
     this.punitive = data.punitivo || null;
@@ -29,12 +28,15 @@ export class summaryVeredictDTO {
     this.tipoJuicio =
       capitalizeFirstLetter(data.Tipo_Juicio.description) || null;
     this.juzgado = capitalizeFirstLetter(data.Juzgado.nombre) || null;
-    this.rubro = capitalizeFirstLetter(data.Rubro.rubro) || null;
     this.fecha = moment(data.fecha).format("DD/MM/YYYY") || null;
     this.punitivo = data.punitive || null;
     this.moral = data.moral || null;
     this.patrimonial = data.patrimonial || null;
-    this.resumen = capitalizeFirstLetter(data.summary) || null;
+    this.resumen = capitalizeFirstLetter(data.summary, 1) || null;
+    this.rubro = [];
+    data.Rubros.forEach((rub) => {
+      this.rubro.push(capitalizeFirstLetter(rub.rubro));
+    });
     this.causas = [];
     data.Reclamos.forEach((rec) => {
       this.causas.push(capitalizeFirstLetter(rec.description));
