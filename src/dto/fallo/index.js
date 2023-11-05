@@ -16,38 +16,41 @@ export class CreateVeredictDTO {
 
 export class summaryVeredictDTO {
   constructor(data) {
-    this.nroExpediente = data.id || null;
-    this.actor = capitalizeFirstLetter(data.agent) || null;
+    this.nroExpediente = data?.id || null;
+    this.actor = capitalizeFirstLetter(data?.agent) || null;
     this.demandado = [];
     data.Empresas.forEach((empresa) => {
       this.demandado.push({
-        razon_social: empresa.razon_social,
-        cuit: empresa.cuit,
+        razon_social: empresa?.razon_social,
+        cuit: empresa?.cuit,
       });
     });
     this.tipoJuicio =
-      capitalizeFirstLetter(data.Tipo_Juicio.description) || null;
-    this.juzgado = capitalizeFirstLetter(data.Juzgado.nombre) || null;
-    this.fecha = moment(data.fecha).format("DD/MM/YYYY") || null;
-    this.punitivo = data.punitive || null;
-    this.moral = data.moral || null;
-    this.patrimonial = data.patrimonial || null;
-    this.resumen = capitalizeFirstLetter(data.summary, 1) || null;
+      capitalizeFirstLetter(data?.Tipo_Juicio?.description) || null;
+    this.Ciudad = capitalizeFirstLetter(data?.Juzgado?.Ciudade?.nombre) || null;
+    this.Provincia =
+      capitalizeFirstLetter(data?.Juzgado?.Ciudade?.Provincia?.nombre) || null;
+    this.juzgado = capitalizeFirstLetter(data?.Juzgado?.nombre) || null;
+    this.fecha = moment(data?.fecha).format("DD/MM/YYYY") || null;
+    this.punitivo = data?.punitive || null;
+    this.moral = data?.moral || null;
+    this.patrimonial = data?.patrimonial || null;
+    this.resumen = data?.summary || null;
     this.rubro = [];
-    data.Rubros.forEach((rub) => {
-      this.rubro.push(capitalizeFirstLetter(rub.rubro));
+    data?.Rubros.forEach((rub) => {
+      this.rubro.push(capitalizeFirstLetter(rub?.rubro));
     });
     this.causas = [];
-    data.Reclamos.forEach((rec) => {
-      this.causas.push(capitalizeFirstLetter(rec.description));
+    data?.Reclamos.forEach((rec) => {
+      this.causas.push(capitalizeFirstLetter(rec?.description));
     });
     this.etiquetas = [];
-    data.Etiquetas.forEach((tag) => {
-      this.etiquetas.push(capitalizeFirstLetter(tag.description));
+    data?.Etiquetas.forEach((tag) => {
+      this.etiquetas.push(capitalizeFirstLetter(tag?.description));
     });
     this.files = [];
-    data.Fallos_Archivos.forEach((file) => {
-      this.files.push({ file: file.filename, url: file.url });
+    data?.Fallos_Archivos.forEach((file) => {
+      this.files.push({ file: file?.filename, url: file?.url });
     });
   }
 }

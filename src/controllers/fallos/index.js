@@ -7,6 +7,7 @@ import {
 } from "../../constants/index.js";
 import { CreateVeredictDTO, summaryVeredictDTO } from "../../dto/index.js";
 import {
+  Ciudades,
   Empresas,
   Etiquetas,
   Etiquetas_x_Fallos,
@@ -14,6 +15,7 @@ import {
   Fallos,
   Fallos_Archivos,
   Juzgados,
+  Provincias,
   Reclamos,
   Reclamos_x_Fallo,
   Rubros,
@@ -34,7 +36,10 @@ export const veredictById = async (req, res) => {
     try {
       file = await Fallos.findByPk(id, {
         include: [
-          Juzgados,
+          {
+            model: Juzgados,
+            include: [{ model: Ciudades, include: [Provincias] }],
+          },
           Tipo_Juicio,
           Reclamos,
           Rubros,
