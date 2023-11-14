@@ -142,7 +142,9 @@ export const createVeredict = async (req, res) => {
   client.ftp.verbose = true;
   try {
     let { demandado = [], etiquetas = [], causas = [], rubro = [] } = req.body;
-    let veredictCreated, falloConEmpresas;
+    let veredictCreated,
+      falloConEmpresas,
+      data = {};
 
     if (!Array.isArray(demandado)) {
       demandado = [demandado];
@@ -161,8 +163,17 @@ export const createVeredict = async (req, res) => {
     }
 
     const newVeredict = new CreateVeredictDTO(req.body);
+    for (const key in newVeredict) {
+      if (newVeredict[key] !== undefined) {
+        data[key] = newVeredict[key];
+      }
+      if (newVeredict[key] === "" || newVeredict[key] == "undefined") {
+        data[key] = null;
+      }
+    }
+
     try {
-      veredictCreated = await Fallos.create(newVeredict);
+      veredictCreated = await Fallos.create(data);
     } catch (error) {
       throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
     }
