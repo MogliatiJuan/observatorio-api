@@ -29,7 +29,6 @@ export const Fallos = sequelize.define(
     },
     tribunalid: {
       type: DataTypes.INTEGER,
-      allowNull: true,
     },
     punitive: {
       type: DataTypes.DECIMAL(11, 2),

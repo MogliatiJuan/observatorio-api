@@ -163,7 +163,11 @@ export const createVeredict = async (req, res) => {
       if (newVeredict[key] !== undefined) {
         data[key] = newVeredict[key];
       }
-      if (newVeredict[key] === "" || newVeredict[key] == "undefined") {
+      if (
+        newVeredict[key] === "" ||
+        newVeredict[key] == "undefined" ||
+        newVeredict[key] == "null"
+      ) {
         data[key] = null;
       }
     }
