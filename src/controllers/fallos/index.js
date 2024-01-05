@@ -111,6 +111,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
       where: conditions,
       include,
       distinct: true,
+      order: [["fecha", "DESC"]],
     });
 
     const filesFormatted = filesFiltered.rows.map((file) => {
