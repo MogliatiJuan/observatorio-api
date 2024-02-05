@@ -27,6 +27,7 @@ import ftp from "basic-ftp";
 import config from "../../config/index.js";
 import sharp from "sharp";
 import moment from "moment/moment.js";
+import { Op } from "sequelize";
 
 export const veredictById = async (req, res) => {
   try {
@@ -83,7 +84,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
 
     const conditions = {};
 
-    actor && (conditions.agent = actor);
+    actor && (conditions.agent = { [Op.like]: `%${actor}%` });
     fecha && (conditions.fecha = moment(fecha, "DD-MM-YYYY"));
     tipoJuicio && (conditions.tipojuicio = tipoJuicio);
     idTribunal && (conditions.tribunalid = parseInt(idTribunal));
