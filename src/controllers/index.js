@@ -28,3 +28,11 @@ export {
   getTypeTrial,
   modifiyTypeTrial,
 } from "./datos/index.js";
+
+export {
+  createRol,
+  getUser,
+  createUser,
+  disableOrEnableUser,
+  setRol,
+} from "./auth/index.js";
