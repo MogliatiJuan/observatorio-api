@@ -13,9 +13,13 @@ const Roles = sequelize.define(
     nombre: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         isAlpha: true,
         isUppercase: true,
+      },
+      set(nombre) {
+        this.setDataValue("nombre", nombre.toUpperCase());
       },
     },
   },
