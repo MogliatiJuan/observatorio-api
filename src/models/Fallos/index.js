@@ -2,8 +2,6 @@ import { DataTypes } from "sequelize";
 import sequelize from "../../db/index.js";
 import Juzgados from "../Juzgados/index.js";
 import Tipo_Juicio from "../Tipo_Juicio/index.js";
-import Reclamos from "../Reclamos/index.js";
-import Rubros from "../Rubros/index.js";
 import Fallos_Archivos from "../Fallos_Archivos/index.js";
 
 export const Fallos = sequelize.define(
@@ -45,7 +43,8 @@ export const Fallos = sequelize.define(
   },
   {
     tableName: "fallo",
-    timestamps: false,
+    timestamps: true,
+    paranoid: true,
     freezeTableName: true,
   }
 );

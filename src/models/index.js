@@ -1,3 +1,7 @@
+import Roles from "./Roles/index.js";
+import Usuarios from "./Usuarios/index.js";
+import Usuario_Rol from "./Usuarios_Roles/index.js";
+
 export { default as Fallos } from "./Fallos/index.js";
 export { default as Empresas } from "./Empresas/index.js";
 export { default as Fallo_x_Empresa } from "./Fallo_x_Empresa/index.js";
@@ -13,3 +17,12 @@ export { default as Etiquetas } from "./Etiquetas/index.js";
 export { default as Fallos_Archivos } from "./Fallos_Archivos/index.js";
 export { default as Reclamos_x_Fallo } from "./Reclamos_x_Fallo/index.js";
 export { default as Rubros_x_Fallos } from "./Rubros_x_Fallos/index.js";
+export { default as Usuarios } from "./Usuarios/index.js";
+export { default as Roles } from "./Roles/index.js";
+export { default as Usuario_Rol } from "./Usuarios_Roles/index.js";
+
+Usuarios.belongsToMany(Roles, {
+  through: Usuario_Rol,
+  foreignKey: "idUsuario",
+});
+Roles.belongsToMany(Usuarios, { through: Usuario_Rol, foreignKey: "idRol" });
