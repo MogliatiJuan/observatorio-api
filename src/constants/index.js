@@ -5,4 +5,5 @@ export {
   mimetypePdf,
   sizeBytes,
   constants,
+  typesDTO,
 } from "./utils/index.js";

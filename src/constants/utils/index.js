@@ -5,3 +5,5 @@ export const sizeBytes = 150000;
 export const mimetypePdf = "application/pdf";
 
 export const constants = { ADMIN: "ADMIN", SALTROUNDS: 10 };
+
+export const typesDTO = { CREATE: "CREATE", GET: "GET", UPDATE: "UPDATE" };
