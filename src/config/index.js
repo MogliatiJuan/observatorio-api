@@ -21,6 +21,8 @@ const config = {
 
   MORGAN_FORMAT: process.env.MORGAN_FORMAT,
   MORGAN_LOGGING: process.env.MORGAN_LOGGING,
+
+  SECRET_KEY: process.env.SECRET_KEY,
 };
 
 export default config;

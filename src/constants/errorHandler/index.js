@@ -36,6 +36,11 @@ const errorHandler = {
     code: "VAL_ERROR_EMPTY_VALUES",
     message: "Hay campos que son requeridos",
   },
+  VAL_ERROR_AUTH_USER: {
+    status: 401,
+    code: "VAL_ERROR_AUTH_USER",
+    message: "Las credenciales son incorrectas",
+  },
   VAL_ERROR_WRONG_VALUES: {
     status: 400,
     code: "VAL_ERROR_WRONG_VALUES",
