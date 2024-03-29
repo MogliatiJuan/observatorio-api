@@ -4,6 +4,7 @@ import {
   createUser,
   disableOrEnableUser,
   getUser,
+  login,
   setRol,
 } from "../../controllers/index.js";
 
@@ -14,6 +15,7 @@ auth
   .post("/users", createUser)
   .patch("/user", disableOrEnableUser)
   .post("/rol", createRol)
-  .put("/rol", setRol);
+  .put("/rol", setRol)
+  .post("/login", login);
 
 export default auth;

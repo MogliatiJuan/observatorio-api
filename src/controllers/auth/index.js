@@ -1,8 +1,11 @@
-import { hash } from "bcrypt";
+import { compareSync, hash } from "bcrypt";
 import { Roles, Usuarios } from "../../models/index.js";
 import { errorHandler, constants, typesDTO } from "../../constants/index.js";
-import { catchHandler } from "../../utils/index.js";
-import createRandomPassword from "../../utils/randomString/index.js";
+import {
+  catchHandler,
+  generateToken,
+  createRandomPassword,
+} from "../../utils/index.js";
 import { UserDTO } from "../../dto/index.js";
 
 export const createUser = async (req, res) => {
@@ -98,6 +101,26 @@ export const setRol = async (req, res) => {
     const usermodified = await Usuarios.findByPk(id, { include: Roles });
 
     res.send(new UserDTO(usermodified, typesDTO.UPDATE));
+  } catch (error) {
+    catchHandler(error, res);
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) throw errorHandler.VAL_ERROR_EMPTY_VALUES;
+
+    const user = await Usuarios.findOne({ where: { email }, include: Roles });
+    if (!user) throw errorHandler.DATA_NOT_FOUND;
+
+    const isValidPassword = compareSync(password, user.password);
+    if (!isValidPassword) throw errorHandler.VAL_ERROR_AUTH_USER;
+
+    const token = generateToken(new UserDTO(user, typesDTO.UPDATE));
+
+    return res.send({ token });
   } catch (error) {
     catchHandler(error, res);
   }

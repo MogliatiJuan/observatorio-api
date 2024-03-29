@@ -35,4 +35,5 @@ export {
   createUser,
   disableOrEnableUser,
   setRol,
+  login,
 } from "./auth/index.js";
