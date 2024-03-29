@@ -1,4 +1,4 @@
-import moment from "moment";
+import dayjs from "dayjs";
 import { capitalizeFirstLetter } from "../../utils/index.js";
 
 export class CreateVeredictDTO {
@@ -31,7 +31,7 @@ export class summaryVeredictDTO {
     this.Provincia =
       capitalizeFirstLetter(data?.Juzgado?.Ciudade?.Provincia?.nombre) || null;
     this.juzgado = capitalizeFirstLetter(data?.Juzgado?.nombre) || null;
-    this.fecha = moment(data?.fecha).format("DD/MM/YYYY") || null;
+    this.fecha = dayjs(data?.fecha).format("DD/MM/YYYY") || null;
     this.punitivo = data?.punitive || null;
     this.moral = data?.moral || null;
     this.patrimonial = data?.patrimonial || null;
