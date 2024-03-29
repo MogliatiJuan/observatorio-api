@@ -10,8 +10,8 @@ import {
 const auth = new Router();
 
 auth
-  .get("/", getUser)
-  .post("/", createUser)
+  .get("/users", getUser)
+  .post("/users", createUser)
   .patch("/user", disableOrEnableUser)
   .post("/rol", createRol)
   .put("/rol", setRol);
