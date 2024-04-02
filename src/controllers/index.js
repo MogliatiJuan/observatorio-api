@@ -2,6 +2,7 @@ export {
   veredictById,
   createVeredict,
   veredictsAllOrFiltered,
+  modifyVeredict,
 } from "./fallos/index.js";
 
 export {
@@ -27,6 +28,7 @@ export {
   createTypeTrial,
   getTypeTrial,
   modifiyTypeTrial,
+  getCurrencies,
 } from "./datos/index.js";
 
 export {
