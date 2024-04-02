@@ -11,6 +11,7 @@ export class CreateVeredictDTO {
     this.moral = data.moral || null;
     this.patrimonial = data.patrimonial || null;
     this.summary = data.resumen || null;
+    this.idDivisa = data.divisa || null;
   }
 }
 
@@ -21,36 +22,92 @@ export class summaryVeredictDTO {
     this.demandado = [];
     data.Empresas.forEach((empresa) => {
       this.demandado.push({
+        id: empresa.id,
         razon_social: empresa?.razon_social,
         cuit: empresa?.cuit,
       });
     });
-    this.tipoJuicio =
-      capitalizeFirstLetter(data?.Tipo_Juicio?.description) || null;
-    this.Ciudad = capitalizeFirstLetter(data?.Juzgado?.Ciudade?.nombre) || null;
-    this.Provincia =
-      capitalizeFirstLetter(data?.Juzgado?.Ciudade?.Provincia?.nombre) || null;
-    this.juzgado = capitalizeFirstLetter(data?.Juzgado?.nombre) || null;
+    this.tipoJuicio = {
+      id: data.Tipo_Juicio.id,
+      nombre: capitalizeFirstLetter(data?.Tipo_Juicio?.description) || null,
+    };
+    this.ciudad = {
+      id: data?.Juzgado?.Ciudade?.id || null,
+      nombre: capitalizeFirstLetter(data?.Juzgado?.Ciudade?.nombre) || null,
+    };
+    this.provincia = {
+      id: data?.Juzgado?.Ciudade?.Provincia?.id || null,
+      nombre:
+        capitalizeFirstLetter(data?.Juzgado?.Ciudade?.Provincia?.nombre) ||
+        null,
+    };
+    this.juzgado = {
+      id: data?.Juzgado?.id,
+      nombre: capitalizeFirstLetter(data?.Juzgado?.nombre) || null,
+    };
     this.fecha = dayjs(data?.fecha).format("DD/MM/YYYY") || null;
     this.punitivo = data?.punitive || null;
     this.moral = data?.moral || null;
     this.patrimonial = data?.patrimonial || null;
+    this.divisa = {
+      id: data.Divisa?.id || null,
+      nombre: data.Divisa?.nombreDivisa || null,
+      codigo: data.Divisa?.codigoDivisa || null,
+    };
     this.resumen = data?.summary || null;
     this.rubro = [];
     data?.Rubros.forEach((rub) => {
-      this.rubro.push(capitalizeFirstLetter(rub?.rubro));
+      this.rubro.push({ id: rub.id, nombre: capitalizeFirstLetter(rub.rubro) });
     });
     this.causas = [];
     data?.Reclamos.forEach((rec) => {
-      this.causas.push(capitalizeFirstLetter(rec?.description));
+      this.causas.push({
+        id: rec.id,
+        nombre: capitalizeFirstLetter(rec.description),
+      });
     });
     this.etiquetas = [];
     data?.Etiquetas.forEach((tag) => {
-      this.etiquetas.push(capitalizeFirstLetter(tag?.description));
+      this.etiquetas.push({
+        id: tag.id,
+        nombre: capitalizeFirstLetter(tag.description),
+      });
     });
     this.files = [];
     data?.Fallos_Archivos.forEach((file) => {
-      this.files.push({ file: file?.filename, url: file?.url });
+      this.files.push({ id: file.id, file: file?.filename, url: file?.url });
+    });
+  }
+}
+
+export class compareDTO {
+  constructor(data) {
+    this.actor = capitalizeFirstLetter(data?.agent) || null;
+    this.demandado = [];
+    data.Empresas.forEach((empresa) => {
+      this.demandado.push(empresa.id.toString());
+    });
+    this.tipoJuicio = data.Tipo_Juicio.id.toString();
+    this.ciudad = data?.Juzgado?.Ciudade?.id.toString() || null;
+    this.provincia = data?.Juzgado?.Ciudade?.Provincia?.id.toString() || null;
+    this.juzgado = data?.Juzgado?.id.toString() || null;
+    this.fecha = dayjs(data?.fecha).format("DD/MM/YYYY") || null;
+    this.punitivo = data?.punitive || null;
+    this.moral = data?.moral || null;
+    this.patrimonial = data?.patrimonial || null;
+    this.divisa = data.Divisa?.id.toString() || null;
+    this.resumen = data?.summary || null;
+    this.rubro = [];
+    data?.Rubros.forEach((rub) => {
+      this.rubro.push(rub.id.toString());
+    });
+    this.causas = [];
+    data?.Reclamos.forEach((rec) => {
+      this.causas.push(rec.id.toString());
+    });
+    this.etiquetas = [];
+    data?.Etiquetas.forEach((tag) => {
+      this.etiquetas.push(tag.id.toString());
     });
   }
 }
