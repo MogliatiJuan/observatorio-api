@@ -20,6 +20,7 @@ export { default as Rubros_x_Fallos } from "./Rubros_x_Fallos/index.js";
 export { default as Usuarios } from "./Usuarios/index.js";
 export { default as Roles } from "./Roles/index.js";
 export { default as Usuario_Rol } from "./Usuarios_Roles/index.js";
+export { default as Divisas } from "./Divisas/index.js";
 
 Usuarios.belongsToMany(Roles, {
   through: Usuario_Rol,
