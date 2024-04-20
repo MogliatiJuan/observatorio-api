@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/index.js";
-import Fallos from "../Fallos/index.js";
 
 export const Fallos_Archivos = sequelize.define(
   "Fallos_Archivos",

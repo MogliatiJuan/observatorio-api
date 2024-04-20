@@ -1,19 +1,19 @@
-import { Sequelize } from "sequelize";
+import { DataTypes } from "sequelize";
 import sequelize from "../../db/index.js";
 
 const Usuario_Rol = sequelize.define(
   "usuario_rol",
   {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
     idUsuario: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
     },
     idRol: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
     },
   },
   { freezeTableName: true }

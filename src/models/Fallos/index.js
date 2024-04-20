@@ -15,8 +15,12 @@ export const Fallos = sequelize.define(
       allowNull: false,
     },
     agent: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
+    demandado: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
     },
     tipojuicio: {
       type: DataTypes.INTEGER,

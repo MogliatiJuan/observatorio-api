@@ -1,8 +1,10 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/index.js";
+import Fallos from "../Fallos/index.js";
+import Empresas from "../Empresas/index.js";
 
-export const Fallo_Empresa = sequelize.define(
-  "Fallo_x_Empresa",
+export const Fallo_x_Actor = sequelize.define(
+  "Fallo_x_Actor",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -12,10 +14,10 @@ export const Fallo_Empresa = sequelize.define(
     },
   },
   {
-    tableName: "fallo_x_empresa",
+    tableName: "fallo_x_actor",
     freezeTableName: true,
     timestamps: false,
   }
 );
 
-export default Fallo_Empresa;
+export default Fallo_x_Actor;

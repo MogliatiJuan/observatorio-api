@@ -1,10 +1,15 @@
+import Empresas from "./Empresas/index.js";
+import Fallo_x_Actor from "./Fallo_x_Actor/index.js";
+import Fallos from "./Fallos/index.js";
 import Roles from "./Roles/index.js";
 import Usuarios from "./Usuarios/index.js";
 import Usuario_Rol from "./Usuarios_Roles/index.js";
+import { Fallo_x_Empresa } from "./index.js";
 
 export { default as Fallos } from "./Fallos/index.js";
 export { default as Empresas } from "./Empresas/index.js";
 export { default as Fallo_x_Empresa } from "./Fallo_x_Empresa/index.js";
+export { default as Fallo_x_Actor } from "./Fallo_x_Actor/index.js";
 export { default as Departamentos } from "./Departamentos/index.js";
 export { default as Juzgados } from "./Juzgados/index.js";
 export { default as Ciudades } from "./Ciudades/index.js";
@@ -27,3 +32,26 @@ Usuarios.belongsToMany(Roles, {
   foreignKey: "idUsuario",
 });
 Roles.belongsToMany(Usuarios, { through: Usuario_Rol, foreignKey: "idRol" });
+Fallos.belongsToMany(Empresas, {
+  as: "EmpresasPorActor",
+  through: Fallo_x_Actor,
+  foreignKey: "idFallo",
+});
+
+Empresas.belongsToMany(Fallos, {
+  as: "FallosPorActor",
+  through: Fallo_x_Actor,
+  foreignKey: "idEmpresa",
+});
+
+Empresas.belongsToMany(Fallos, {
+  as: "FallosPorEmpresa",
+  through: Fallo_x_Empresa,
+  foreignKey: "idEmpresa",
+});
+
+Fallos.belongsToMany(Empresas, {
+  as: "EmpresasPorFallo",
+  through: Fallo_x_Empresa,
+  foreignKey: "idFallo",
+});
