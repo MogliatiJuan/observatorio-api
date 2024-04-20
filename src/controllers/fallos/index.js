@@ -21,6 +21,7 @@ import {
   Empresas,
   Etiquetas,
   Etiquetas_x_Fallos,
+  Fallo_x_Actor,
   Fallo_x_Empresa,
   Fallos,
   Fallos_Archivos,
@@ -41,6 +42,7 @@ import {
   processChanges,
   updateRecord,
 } from "../../utils/modifyVerdict/index.js";
+import { isFirm } from "../../utils/isFirm.js";
 
 dayjs.extend(customParseFormat);
 
@@ -59,24 +61,30 @@ export const veredictById = async (req, res) => {
           Tipo_Juicio,
           Reclamos,
           Rubros,
-          Empresas,
           Etiquetas,
           Fallos_Archivos,
           Divisas,
+          {
+            model: Empresas,
+            as: "EmpresasPorFallo",
+            through: { model: Fallo_x_Empresa, as: "FallosPorEmpresa" },
+          },
+          {
+            model: Empresas,
+            as: "EmpresasPorActor",
+            through: { model: Fallo_x_Actor, as: "FallosPorActor" },
+          },
         ],
       });
     } catch (error) {
       throw { ...errorHandler.DATABASE, details: error?.message };
     }
-
     if (!file) {
       return res.send([]);
     }
-
     file.Fallos_Archivos.forEach((fileFallo) => {
       fileFallo.url = `${ftpStaticFolderUrl}/observatorio/fallos/${file.id}/${fileFallo.filename}`;
     });
-
     res.send(new summaryVeredictDTO(file));
   } catch (error) {
     catchHandler(error, res);
@@ -86,9 +94,11 @@ export const veredictById = async (req, res) => {
 export const veredictsAllOrFiltered = async (req, res) => {
   try {
     const {
-      actor,
+      actor = null,
       rubro = null,
       demandado = null,
+      demandadoEmpresas = null,
+      actorEmpresas = null,
       fecha,
       etiquetas = null,
       tipoJuicio,
@@ -98,9 +108,12 @@ export const veredictsAllOrFiltered = async (req, res) => {
       offset = 10,
     } = req.query;
 
+    const paranoid = req.query.paranoid === "false" ? false : true;
+
     const conditions = {};
 
     actor && (conditions.agent = { [Op.like]: `%${actor}%` });
+    demandado && (conditions.demandado = { [Op.like]: `%${demandado}%` });
     fecha && (conditions.fecha = fecha);
     tipoJuicio && (conditions.tipojuicio = tipoJuicio);
     idTribunal && (conditions.tribunalid = parseInt(idTribunal));
@@ -111,7 +124,15 @@ export const veredictsAllOrFiltered = async (req, res) => {
       { model: Rubros, where: rubro && { id: rubro } },
       {
         model: Empresas,
-        where: demandado && { id: demandado },
+        as: "EmpresasPorFallo",
+        through: { model: Fallo_x_Empresa, as: "FallosPorEmpresa" },
+        where: demandadoEmpresas && { id: demandadoEmpresas },
+      },
+      {
+        model: Empresas,
+        as: "EmpresasPorActor",
+        through: { model: Fallo_x_Actor, as: "FallosPorActor" },
+        where: actorEmpresas && { id: actorEmpresas },
       },
       {
         model: Etiquetas,
@@ -122,14 +143,24 @@ export const veredictsAllOrFiltered = async (req, res) => {
     ];
 
     //pagination
-    const filesFiltered = await Fallos.findAndCountAll({
-      limit: +offset,
-      offset: (+page - 1) * +offset,
-      where: conditions,
-      include,
-      distinct: true,
-      order: [["fecha", "DESC"]],
-    });
+    const filesFiltered = paranoid
+      ? await Fallos.findAndCountAll({
+          limit: +offset,
+          offset: (+page - 1) * +offset,
+          where: conditions,
+          include,
+          distinct: true,
+          order: [["fecha", "DESC"]],
+        })
+      : await Fallos.findAndCountAll({
+          limit: +offset,
+          offset: (+page - 1) * +offset,
+          where: { deletedAt: { [Op.ne]: null } },
+          include,
+          distinct: true,
+          order: [["deletedAt", "DESC"]],
+          paranoid,
+        });
 
     const filesFormatted = filesFiltered.rows.map((file) => {
       if (file.Fallos_Archivos) {
@@ -155,14 +186,16 @@ export const createVeredict = async (req, res) => {
   const client = new ftp.Client();
   client.ftp.verbose = true;
   try {
-    let { demandado = [], etiquetas = [], causas = [], rubro = [] } = req.body;
+    let {
+      demandado = [],
+      etiquetas = [],
+      causas = [],
+      rubro = [],
+      actor = [],
+    } = req.body;
     let veredictCreated,
       falloConEmpresas,
       data = {};
-
-    if (!Array.isArray(demandado)) {
-      demandado = [demandado];
-    }
 
     if (!Array.isArray(etiquetas)) {
       etiquetas = [etiquetas];
@@ -176,7 +209,14 @@ export const createVeredict = async (req, res) => {
       rubro = [rubro];
     }
 
-    const newVeredict = new CreateVeredictDTO(req.body);
+    const isFirmActor = isFirm(actor);
+    const isFirmDemandado = isFirm(demandado);
+
+    const newVeredict = new CreateVeredictDTO(
+      req.body,
+      isFirmDemandado,
+      isFirmActor
+    );
     for (const key in newVeredict) {
       if (newVeredict[key] !== undefined) {
         data[key] = newVeredict[key];
@@ -196,16 +236,45 @@ export const createVeredict = async (req, res) => {
       throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
     }
 
-    if (demandado.length >= 1) {
+    if (isFirmDemandado) {
       try {
-        await Promise.all(
-          demandado.map(async (id) => {
-            await Fallo_x_Empresa.create({
-              idFallo: veredictCreated.id,
-              idEmpresa: id,
-            });
-          })
-        );
+        if (!Array.isArray(demandado)) {
+          await Fallo_x_Empresa.create({
+            idFallo: veredictCreated.id,
+            idEmpresa: demandado,
+          });
+        } else {
+          await Promise.all(
+            demandado.map(async (id) => {
+              await Fallo_x_Empresa.create({
+                idFallo: veredictCreated.id,
+                idEmpresa: id,
+              });
+            })
+          );
+        }
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    }
+
+    if (isFirmActor) {
+      try {
+        if (!Array.isArray(actor)) {
+          await Fallo_x_Actor.create({
+            idFallo: veredictCreated.id,
+            idEmpresa: actor,
+          });
+        } else {
+          await Promise.all(
+            actor.map(async (id) => {
+              await Fallo_x_Actor.create({
+                idFallo: veredictCreated.id,
+                idEmpresa: id,
+              });
+            })
+          );
+        }
       } catch (error) {
         throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
       }
@@ -323,7 +392,16 @@ export const createVeredict = async (req, res) => {
           Tipo_Juicio,
           Reclamos,
           Rubros,
-          Empresas,
+          {
+            model: Empresas,
+            as: "EmpresasPorFallo",
+            through: { model: Fallo_x_Empresa, as: "FallosPorEmpresa" },
+          },
+          {
+            model: Empresas,
+            as: "EmpresasPorActor",
+            through: { model: Fallo_x_Actor, as: "FallosPorActor" },
+          },
           Etiquetas,
           Fallos_Archivos,
         ],
@@ -349,13 +427,16 @@ export const modifyVeredict = async (req, res) => {
   client.ftp.verbose = true;
   try {
     const { id } = req.params;
-    let demandado, causas, etiquetas, rubro;
+    let demandadoActores, demandadoEmpresas, causas, etiquetas, rubro;
 
     const record = await getFallosById(id);
 
     //convierte en array todo para tratarlo siempre igual
-    if (!Array.isArray(req.body.demandado)) {
-      req.body.demandado = [req.body.demandado];
+    if (!Array.isArray(req.body.demandadoActores)) {
+      req.body.demandadoActores = [req.body.demandadoActores];
+    }
+    if (!Array.isArray(req.body.demandadoEmpresas)) {
+      req.body.demandadoEmpresas = [req.body.demandadoEmpresas];
     }
     if (!Array.isArray(req.body.causas)) {
       req.body.causas = [req.body.causas];
@@ -366,29 +447,83 @@ export const modifyVeredict = async (req, res) => {
     if (!Array.isArray(req.body.rubro)) {
       req.body.rubro = [req.body.rubro];
     }
-
     //del front mando null en string y lo transformo
     if (req.body.ciudad === "null") req.body.ciudad = null;
     if (req.body.provincia === "null") req.body.provincia = null;
     if (req.body.juzgado === "null") req.body.juzgado = null;
+    if (req.body.demandado === "null") req.body.demandado = null;
+    if (req.body.actor === "null") req.body.actor = null;
+    if (req.body.resumen.trim() === "" || req.body.resumen === "null")
+      req.body.resumen = null;
+    if (
+      req.body.demandadoEmpresas.some((e) => e == "undefined" || e == undefined)
+    ) {
+      req.body.demandadoEmpresas = [];
+    }
+    if (
+      req.body.demandadoActores.some((e) => e == "undefined" || e == undefined)
+    ) {
+      req.body.demandadoActores = [];
+    }
+    if (req.body.etiquetas.some((e) => e == "undefined" || e == undefined)) {
+      req.body.etiquetas = [];
+    }
+    if (req.body.rubro.some((e) => e == "undefined" || e == undefined)) {
+      req.body.rubro = [];
+    }
+    if (req.body.causas.some((e) => e == "undefined" || e == undefined)) {
+      req.body.causas = [];
+    }
 
     const changes = compareObjects(req.body, new compareDTO(record));
-
-    if (noChangesDetected(changes, req.files)) {
-      throw new Error(
-        "No se han detectado cambios en la información a actualizar"
-      );
-    }
+    if (noChangesDetected(changes, req.files))
+      throw {
+        ...errorHandler.VAL_NO_CHANGES_FOUND,
+        details: errorHandler.MESSAGES.no_changes_found,
+      };
 
     const veredictData = processChanges(changes, new compareDTO(record));
-
     //logica para borrar y crear los nuevos valores
-    if (!Array.isArray(changes.demandado)) {
-      demandado = [changes.demandado];
+    if (!Array.isArray(changes.demandadoActores)) {
+      demandadoActores = [changes.demandadoActores];
     } else {
-      demandado = changes.demandado;
+      demandadoActores = changes.demandadoActores;
     }
-    if (changes.demandado && demandado.length >= 1) {
+    if (changes.demandadoActores && demandadoActores.length >= 1) {
+      try {
+        await Fallo_x_Actor.destroy({
+          where: {
+            idFallo: id,
+          },
+        });
+        await Promise.all(
+          demandadoActores.map(async (idD) => {
+            await Fallo_x_Actor.create({
+              idFallo: id,
+              idEmpresa: idD,
+            });
+          })
+        );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    } else if (demandadoActores.length === 0) {
+      try {
+        await Fallo_x_Actor.destroy({
+          where: {
+            idFallo: id,
+          },
+        });
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    }
+    if (!Array.isArray(changes.demandadoEmpresas)) {
+      demandadoEmpresas = [changes.demandadoEmpresas];
+    } else {
+      demandadoEmpresas = changes.demandadoEmpresas;
+    }
+    if (changes.demandadoEmpresas && demandadoEmpresas.length >= 1) {
       try {
         await Fallo_x_Empresa.destroy({
           where: {
@@ -396,13 +531,23 @@ export const modifyVeredict = async (req, res) => {
           },
         });
         await Promise.all(
-          demandado.map(async (idD) => {
+          demandadoEmpresas.map(async (idD) => {
             await Fallo_x_Empresa.create({
               idFallo: id,
               idEmpresa: idD,
             });
           })
         );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    } else if (demandadoEmpresas.length === 0) {
+      try {
+        await Fallo_x_Empresa.destroy({
+          where: {
+            idFallo: id,
+          },
+        });
       } catch (error) {
         throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
       }
@@ -430,6 +575,16 @@ export const modifyVeredict = async (req, res) => {
       } catch (error) {
         throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
       }
+    } else if (causas.length === 0) {
+      try {
+        await Reclamos_x_Fallo.destroy({
+          where: {
+            idFallo: id,
+          },
+        });
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
     }
     if (!Array.isArray(changes.etiquetas)) {
       etiquetas = [changes.etiquetas];
@@ -454,6 +609,16 @@ export const modifyVeredict = async (req, res) => {
       } catch (error) {
         throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
       }
+    } else if (etiquetas.length === 0) {
+      try {
+        await Etiquetas_x_Fallos.destroy({
+          where: {
+            idFallo: id,
+          },
+        });
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
     }
     if (!Array.isArray(changes.rubro)) {
       rubro = [changes.rubro];
@@ -475,6 +640,16 @@ export const modifyVeredict = async (req, res) => {
             });
           })
         );
+      } catch (error) {
+        throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
+      }
+    } else if (rubro.length == 0) {
+      try {
+        await Rubros_x_Fallos.destroy({
+          where: {
+            idFallo: id,
+          },
+        });
       } catch (error) {
         throw { ...errorHandler.DATABASE_UPLOAD, details: error?.message };
       }
@@ -561,5 +736,37 @@ export const modifyVeredict = async (req, res) => {
     catchHandler(error, res);
   } finally {
     client.close();
+  }
+};
+
+export const deleteVeredict = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedVeredict = await Fallos.destroy({
+      where: {
+        id,
+      },
+    });
+    if (!deletedVeredict) throw errorHandler.DATA_NOT_FOUND;
+
+    res.send({ message: "Eliminado correctamente", isSuccess: true });
+  } catch (error) {
+    catchHandler(error, res);
+  }
+};
+
+export const restoreVeredict = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const restoredVeredict = await Fallos.restore({
+      where: {
+        id,
+      },
+    });
+    if (!restoredVeredict) throw errorHandler.DATA_NOT_FOUND;
+
+    res.send({ message: "Restaurado correctamente", isSuccess: true });
+  } catch (error) {
+    catchHandler(error, res);
   }
 };

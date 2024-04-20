@@ -3,6 +3,8 @@ export {
   createVeredict,
   veredictsAllOrFiltered,
   modifyVeredict,
+  deleteVeredict,
+  restoreVeredict,
 } from "./fallos/index.js";
 
 export {
