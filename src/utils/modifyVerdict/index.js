@@ -1,8 +1,11 @@
+import dayjs from "dayjs";
 import {
   Ciudades,
   Divisas,
   Empresas,
   Etiquetas,
+  Fallo_x_Actor,
+  Fallo_x_Empresa,
   Fallos,
   Fallos_Archivos,
   Juzgados,
@@ -22,7 +25,16 @@ export const getFallosById = async (id) => {
       Tipo_Juicio,
       Reclamos,
       Rubros,
-      Empresas,
+      {
+        model: Empresas,
+        as: "EmpresasPorFallo",
+        through: { model: Fallo_x_Empresa, as: "FallosPorEmpresa" },
+      },
+      {
+        model: Empresas,
+        as: "EmpresasPorActor",
+        through: { model: Fallo_x_Actor, as: "FallosPorActor" },
+      },
       Etiquetas,
       Fallos_Archivos,
       Divisas,
@@ -50,6 +62,9 @@ export const processChanges = (changes, oldValues) => {
         break;
       case "actor":
         veredictData.agent = changes.actor;
+        break;
+      case "demandado":
+        veredictData.demandado = changes.demandado;
         break;
       case "juzgado" || "ciudad" || "provincia":
         if (
@@ -112,7 +127,6 @@ export const updateRecord = async (record, data) => {
 
 export const compareObjects = (obj1, obj2) => {
   const changedProperties = {};
-
   // Recorre todas las propiedades del primer objeto
   for (const key in obj1) {
     // Verifica si la propiedad existe en el segundo objeto

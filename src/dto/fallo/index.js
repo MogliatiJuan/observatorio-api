@@ -2,8 +2,9 @@ import dayjs from "dayjs";
 import { capitalizeFirstLetter } from "../../utils/index.js";
 
 export class CreateVeredictDTO {
-  constructor(data) {
-    this.agent = data.actor || null;
+  constructor(data, firmDemandado, actorDemandado) {
+    this.agent = actorDemandado ? null : data.actor || null;
+    this.demandado = firmDemandado ? null : data.demandado || null;
     this.tipojuicio = data.tipoJuicio || null;
     this.fecha = data.fecha || null;
     this.tribunalid = data.idTribunal || null;
@@ -19,9 +20,18 @@ export class summaryVeredictDTO {
   constructor(data) {
     this.nroExpediente = data?.id || null;
     this.actor = capitalizeFirstLetter(data?.agent) || null;
-    this.demandado = [];
-    data.Empresas.forEach((empresa) => {
-      this.demandado.push({
+    this.demandado = capitalizeFirstLetter(data?.demandado) || null;
+    this.demandadoActores = [];
+    data.EmpresasPorActor.forEach((empresa) => {
+      this.demandadoActores.push({
+        id: empresa.id,
+        razon_social: empresa?.razon_social,
+        cuit: empresa?.cuit,
+      });
+    });
+    this.demandadoEmpresas = [];
+    data.EmpresasPorFallo.forEach((empresa) => {
+      this.demandadoEmpresas.push({
         id: empresa.id,
         razon_social: empresa?.razon_social,
         cuit: empresa?.cuit,
@@ -77,15 +87,37 @@ export class summaryVeredictDTO {
     data?.Fallos_Archivos.forEach((file) => {
       this.files.push({ id: file.id, file: file?.filename, url: file?.url });
     });
+    this.createdAt = dayjs(data.createdAt).isValid()
+      ? dayjs(data.createdAt).format("DD/MM/YYYY")
+      : null;
+    this.updatedAt = dayjs(data.updatedAt).isValid()
+      ? dayjs(data.updatedAt).format("DD/MM/YYYY")
+      : null;
+    this.deletedAt = dayjs(data.deletedAt).isValid()
+      ? dayjs(data.deletedAt).format("DD/MM/YYYY")
+      : null;
   }
 }
 
 export class compareDTO {
   constructor(data) {
     this.actor = capitalizeFirstLetter(data?.agent) || null;
-    this.demandado = [];
-    data.Empresas.forEach((empresa) => {
-      this.demandado.push(empresa.id.toString());
+    this.demandado = capitalizeFirstLetter(data?.demandado) || null;
+    this.demandadoActores = [];
+    data.EmpresasPorActor.forEach((empresa) => {
+      this.demandadoActores.push({
+        id: empresa.id,
+        razon_social: empresa?.razon_social,
+        cuit: empresa?.cuit,
+      });
+    });
+    this.demandadoEmpresas = [];
+    data.EmpresasPorFallo.forEach((empresa) => {
+      this.demandadoEmpresas.push({
+        id: empresa.id,
+        razon_social: empresa?.razon_social,
+        cuit: empresa?.cuit,
+      });
     });
     this.tipoJuicio = data.Tipo_Juicio.id.toString();
     this.ciudad = data?.Juzgado?.Ciudade?.id.toString() || null;
