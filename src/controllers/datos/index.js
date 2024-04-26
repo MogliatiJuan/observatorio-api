@@ -2,6 +2,7 @@ import { errorHandler } from "../../constants/index.js";
 import {
   Ciudades,
   Departamentos,
+  Divisas,
   Empresas,
   Etiquetas,
   Juzgados,
@@ -493,6 +494,22 @@ export const modifiyTypeTrial = async (req, res) => {
       throw { ...errorHandler.DATABASE_UPLOAD, details: error };
     }
     res.send(modifiedTypeTrial);
+  } catch (error) {
+    catchHandler(error, res);
+  }
+};
+
+export const getCurrencies = async (req, res) => {
+  try {
+    const { code } = req.query;
+
+    if (!code) {
+      const allCurrencies = await Divisas.findAll();
+      return res.send(allCurrencies);
+    } else {
+      const currency = await Divisas.findByPk(code);
+      return res.send(currency);
+    }
   } catch (error) {
     catchHandler(error, res);
   }
