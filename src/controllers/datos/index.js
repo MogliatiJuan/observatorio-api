@@ -505,7 +505,10 @@ export const getCurrencies = async (req, res) => {
 
     if (!code) {
       const allCurrencies = await Divisas.findAll();
-      return res.send(allCurrencies);
+      const arsAndUsd = allCurrencies.filter(
+        (c) => c.codigoDivisa === "ARS" || c.codigoDivisa === "USD"
+      );
+      return res.send(arsAndUsd);
     } else {
       const currency = await Divisas.findByPk(code);
       return res.send(currency);
