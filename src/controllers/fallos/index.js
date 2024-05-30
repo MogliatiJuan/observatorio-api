@@ -150,7 +150,7 @@ export const veredictsAllOrFiltered = async (req, res) => {
           where: conditions,
           include,
           distinct: true,
-          order: [["fecha", "DESC"]],
+          order: [["createdAt", "DESC"]],
         })
       : await Fallos.findAndCountAll({
           limit: +offset,
@@ -451,6 +451,9 @@ export const modifyVeredict = async (req, res) => {
     if (req.body.ciudad === "null") req.body.ciudad = null;
     if (req.body.provincia === "null") req.body.provincia = null;
     if (req.body.juzgado === "null") req.body.juzgado = null;
+    if (req.body.punitivo === "") req.body.punitivo = null;
+    if (req.body.moral === "") req.body.moral = null;
+    if (req.body.patrimonial === "") req.body.patrimonial = null;
     if (req.body.demandado === "null") req.body.demandado = null;
     if (req.body.actor === "null") req.body.actor = null;
     if (req.body.resumen.trim() === "" || req.body.resumen === "null")
