@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js",
+    "dev": "node --watch ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,22 +13,18 @@
   "license": "ISC",
   "dependencies": {
     "basic-ftp": "^5.0.3",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
-    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-fileupload": "^1.4.0",
-    "moment": "^2.29.4",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.0",
-    "nodemon": "^3.0.1",
-    "pdfjs": "^2.4.2",
     "sequelize": "^6.33.0",
     "sharp": "^0.32.6",
-    "stream": "^0.0.2",
-    "uuid": "^8.3.2",
-    "uuidv4": "^6.2.6"
+    "stream": "^0.0.2"
   }
 }

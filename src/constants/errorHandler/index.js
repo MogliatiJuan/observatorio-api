@@ -36,6 +36,11 @@ const errorHandler = {
     code: "VAL_ERROR_EMPTY_VALUES",
     message: "Hay campos que son requeridos",
   },
+  VAL_ERROR_AUTH_USER: {
+    status: 401,
+    code: "VAL_ERROR_AUTH_USER",
+    message: "Las credenciales son incorrectas",
+  },
   VAL_ERROR_WRONG_VALUES: {
     status: 400,
     code: "VAL_ERROR_WRONG_VALUES",
@@ -52,6 +57,11 @@ const errorHandler = {
     code: "VAL-ERROR-ID",
     message: `El campo ID no puede estar vacío`,
   },
+  VAL_NO_CHANGES_FOUND: {
+    status: 400,
+    code: "VAL-NO-CHANGES-FOUND",
+    message: `No se realizó ningún cambio`,
+  },
   MESSAGES: {
     id_required: "El campo 'id' es requerido",
     tribunals_required:
@@ -63,6 +73,7 @@ const errorHandler = {
       "El dato no se encuentra en los registros o el dato a modificar tiene registrado el mismo valor",
     create_tribunal:
       "Los campos 'nombre', 'idDepartamento' y 'idCiudad' son necesarios para crear un nuevo juzgado",
+    no_changes_found: "Debe realizar algún cambio para guardar los datos",
   },
 };
 export default errorHandler;

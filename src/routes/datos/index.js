@@ -9,6 +9,7 @@ import {
   getAllSinceProvince,
   getCities,
   getClaims,
+  getCurrencies,
   getDepartments,
   getFactories,
   getProvinces,
@@ -47,5 +48,6 @@ router.patch("/rubros/:id", modifiySector);
 router.get("/tipojuicio", getTypeTrial);
 router.post("/tipojuicio", createTypeTrial);
 router.patch("/tipojuicio/:id", modifiyTypeTrial);
+router.get("/divisas", getCurrencies);
 
 export default router;

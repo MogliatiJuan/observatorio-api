@@ -2,9 +2,8 @@ import { DataTypes } from "sequelize";
 import sequelize from "../../db/index.js";
 import Juzgados from "../Juzgados/index.js";
 import Tipo_Juicio from "../Tipo_Juicio/index.js";
-import Reclamos from "../Reclamos/index.js";
-import Rubros from "../Rubros/index.js";
 import Fallos_Archivos from "../Fallos_Archivos/index.js";
+import Divisas from "../Divisas/index.js";
 
 export const Fallos = sequelize.define(
   "Fallo",
@@ -16,8 +15,12 @@ export const Fallos = sequelize.define(
       allowNull: false,
     },
     agent: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
+    demandado: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
     },
     tipojuicio: {
       type: DataTypes.INTEGER,
@@ -39,13 +42,18 @@ export const Fallos = sequelize.define(
     patrimonial: {
       type: DataTypes.DECIMAL(11, 2),
     },
+    idDivisa: {
+      type: DataTypes.INTEGER,
+      defaultValue: 7,
+    },
     summary: {
       type: DataTypes.STRING(600),
     },
   },
   {
     tableName: "fallo",
-    timestamps: false,
+    timestamps: true,
+    paranoid: true,
     freezeTableName: true,
   }
 );
@@ -53,5 +61,9 @@ export const Fallos = sequelize.define(
 Fallos.belongsTo(Tipo_Juicio, { foreignKey: "tipojuicio" });
 Fallos.belongsTo(Juzgados, { foreignKey: "tribunalid" });
 Fallos.hasMany(Fallos_Archivos, { foreignKey: "idFallo" });
+Fallos.belongsTo(Divisas, {
+  foreignKey: "idDivisa",
+  targetKey: "id",
+});
 
 export default Fallos;
