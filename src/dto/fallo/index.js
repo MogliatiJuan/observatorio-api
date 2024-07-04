@@ -105,19 +105,11 @@ export class compareDTO {
     this.demandado = capitalizeFirstLetter(data?.demandado) || null;
     this.demandadoActores = [];
     data.EmpresasPorActor.forEach((empresa) => {
-      this.demandadoActores.push({
-        id: empresa.id,
-        razon_social: empresa?.razon_social,
-        cuit: empresa?.cuit,
-      });
+      this.demandadoActores.push(empresa.id);
     });
     this.demandadoEmpresas = [];
     data.EmpresasPorFallo.forEach((empresa) => {
-      this.demandadoEmpresas.push({
-        id: empresa.id,
-        razon_social: empresa?.razon_social,
-        cuit: empresa?.cuit,
-      });
+      this.demandadoEmpresas.push(`${empresa.id}`);
     });
     this.tipoJuicio = data.Tipo_Juicio.id.toString();
     this.ciudad = data?.Juzgado?.Ciudade?.id.toString() || null;
