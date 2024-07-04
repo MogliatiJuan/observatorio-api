@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
     message: "Welcome to the Observatory API",
     description:
       "This API allows you to view, modify, and upload information and files related to the certains verdicts.",
-    version: "1.0.0",
+    version: "2.0.0",
   });
 });
 app.all("*", (req, res) => {
