@@ -506,7 +506,10 @@ export const getCurrencies = async (req, res) => {
     if (!code) {
       const allCurrencies = await Divisas.findAll();
       const arsAndUsd = allCurrencies.filter(
-        (c) => c.codigoDivisa === "ARS" || c.codigoDivisa === "USD"
+        (c) =>
+          c.codigoDivisa === "ARS" ||
+          c.codigoDivisa === "USD" ||
+          c.codigoDivisa === "SMV"
       );
       return res.send(arsAndUsd);
     } else {

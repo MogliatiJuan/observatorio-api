@@ -451,13 +451,17 @@ export const modifyVeredict = async (req, res) => {
     if (req.body.ciudad === "null") req.body.ciudad = null;
     if (req.body.provincia === "null") req.body.provincia = null;
     if (req.body.juzgado === "null") req.body.juzgado = null;
-    if (req.body.punitivo === "") req.body.punitivo = null;
-    if (req.body.moral === "") req.body.moral = null;
-    if (req.body.patrimonial === "") req.body.patrimonial = null;
+    if (req.body.punitivo === "" || req.body.punitivo == "null")
+      req.body.punitivo = null;
+    if (req.body.moral === "" || req.body.moral == "null")
+      req.body.moral = null;
+    if (req.body.patrimonial === "" || req.body.patrimonial == "null")
+      req.body.patrimonial = null;
     if (req.body.demandado === "null") req.body.demandado = null;
     if (req.body.actor === "null") req.body.actor = null;
     if (req.body.resumen.trim() === "" || req.body.resumen === "null")
       req.body.resumen = null;
+    if (req.body.divisa == "null") req.body.divisa = null;
     if (
       req.body.demandadoEmpresas.some((e) => e == "undefined" || e == undefined)
     ) {
