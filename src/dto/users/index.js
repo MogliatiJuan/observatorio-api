@@ -9,6 +9,8 @@ export class UserDTO {
     this.apellido = u.apellido || null;
     this.email = u.email || null;
     this.dni = u.dni || null;
+    this.telefono = u.telefono || null;
+    this.domicilioElectronico = u.domicilioElectronico || null;
     this.updatedAt = dayjs(u.updatedAt).format("DD/MM/YYYY HH:mm") || null;
     this.createdAt = dayjs(u.createdAt).format("DD/MM/YYYY HH:mm") || null;
     if (type === typesDTO.CREATE) {

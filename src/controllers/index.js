@@ -39,5 +39,10 @@ export {
   createUser,
   disableOrEnableUser,
   setRol,
+  deleteRol,
   login,
+  createProfession,
+  getProfessions,
+  deleteProfession,
+  modifyProfession,
 } from "./auth/index.js";

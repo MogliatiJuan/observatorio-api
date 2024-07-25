@@ -1,6 +1,11 @@
 import { compareSync, hash } from "bcrypt";
-import { Roles, Usuarios } from "../../models/index.js";
-import { errorHandler, constants, typesDTO } from "../../constants/index.js";
+import { Profesiones, Roles, Usuarios } from "../../models/index.js";
+import {
+  errorHandler,
+  constants,
+  typesDTO,
+  validPasswordRegex,
+} from "../../constants/index.js";
 import {
   catchHandler,
   generateToken,
@@ -10,12 +15,26 @@ import { UserDTO } from "../../dto/index.js";
 
 export const createUser = async (req, res) => {
   try {
-    const { matricula, nombre, apellido, email, dni, idRol = [] } = req.body;
-    if (!matricula || !nombre || !apellido || !email || !dni)
+    const {
+      matricula = null,
+      nombre,
+      apellido,
+      email,
+      idRol = [],
+      domicilioElectronico = null,
+      telefono = null,
+      profesion = [],
+      password,
+    } = req.body;
+    if (!nombre || !apellido || !email || !password)
       throw errorHandler.VAL_ERROR_EMPTY_VALUES;
 
-    const password = createRandomPassword(8);
-
+    const validPassword = validPasswordRegex.test(password);
+    if (!validPassword)
+      throw {
+        ...errorHandler.VAL_ERROR_WRONG_VALUES,
+        details: errorHandler.MESSAGES.invalid_password,
+      };
     const hashedPassword = await hash(password, constants.SALTROUNDS);
 
     const user = await Usuarios.create({
@@ -23,10 +42,13 @@ export const createUser = async (req, res) => {
       nombre,
       apellido,
       email,
-      dni,
+      domicilioElectronico,
+      telefono,
+      profesion,
       password: hashedPassword,
     });
 
+    await user.addProfesiones(profesion);
     await user.addRoles(idRol);
     const newUser = new UserDTO(user, typesDTO.CREATE);
 
@@ -86,6 +108,19 @@ export const createRol = async (req, res) => {
   }
 };
 
+export const deleteRol = async (req, res) => {
+  try {
+    const { id } = req.query;
+    if (!id) throw errorHandler.VAL_ERROR_ID;
+
+    const deletedRol = await Roles.destroy({ where: { id } });
+    if (deletedRol != 1) throw errorHandler.DATA_NOT_FOUND;
+    res.send({ message: "Rol eliminado" });
+  } catch (error) {
+    catchHandler(error, res);
+  }
+};
+
 export const setRol = async (req, res) => {
   try {
     const { id } = req.query;
@@ -121,6 +156,58 @@ export const login = async (req, res) => {
     const token = generateToken(new UserDTO(user, typesDTO.UPDATE));
 
     return res.send({ token });
+  } catch (error) {
+    catchHandler(error, res);
+  }
+};
+
+export const createProfession = async (req, res) => {
+  try {
+    const { profesion } = req.body;
+    const newProfession = await Profesiones.create({ profesion });
+    res.send(newProfession);
+  } catch (error) {
+    catchHandler(error, res);
+  }
+};
+
+export const getProfessions = async (req, res) => {
+  try {
+    const { id = null } = req.query;
+
+    if (!id) {
+      const professions = await Profesiones.findAll();
+      return res.send(professions);
+    }
+
+    const profession = await Profesiones.findByPk(id);
+    res.send(profession);
+  } catch (error) {
+    catchHandler(error, res);
+  }
+};
+
+export const deleteProfession = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const deletedProfession = await Profesiones.destroy({ where: { id } });
+    if (deletedProfession != 1) throw errorHandler.DATA_NOT_FOUND;
+    res.send({ message: "Profesión eliminada" });
+  } catch (error) {
+    catchHandler(error, res);
+  }
+};
+
+export const modifyProfession = async (req, res) => {
+  try {
+    const { id, profesion } = req.body;
+    const modifiedProfession = await Profesiones.update(
+      { profesion },
+      { where: { id } }
+    );
+    if (modifiedProfession != 1) throw errorHandler.DATA_NOT_FOUND;
+    const profession = await Profesiones.findByPk(id);
+    res.send(profession);
   } catch (error) {
     catchHandler(error, res);
   }
