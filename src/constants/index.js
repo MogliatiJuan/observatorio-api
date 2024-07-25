@@ -6,4 +6,5 @@ export {
   sizeBytes,
   constants,
   typesDTO,
+  validPasswordRegex,
 } from "./utils/index.js";

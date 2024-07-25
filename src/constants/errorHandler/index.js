@@ -74,6 +74,8 @@ const errorHandler = {
     create_tribunal:
       "Los campos 'nombre', 'idDepartamento' y 'idCiudad' son necesarios para crear un nuevo juzgado",
     no_changes_found: "Debe realizar algún cambio para guardar los datos",
+    invalid_password:
+      "La contraseña debe poseer al menos 1 cáracter especial, 1 mayúscula y 1 minúscula",
   },
 };
 export default errorHandler;
