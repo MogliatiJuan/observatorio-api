@@ -1,6 +1,8 @@
 import Empresas from "./Empresas/index.js";
 import Fallo_x_Actor from "./Fallo_x_Actor/index.js";
 import Fallos from "./Fallos/index.js";
+import Profesiones from "./Profesiones/index.js";
+import Profesiones_Usuarios from "./Profiones_Usuarios/index.js";
 import Roles from "./Roles/index.js";
 import Usuarios from "./Usuarios/index.js";
 import Usuario_Rol from "./Usuarios_Roles/index.js";
@@ -26,6 +28,8 @@ export { default as Usuarios } from "./Usuarios/index.js";
 export { default as Roles } from "./Roles/index.js";
 export { default as Usuario_Rol } from "./Usuarios_Roles/index.js";
 export { default as Divisas } from "./Divisas/index.js";
+export { default as Profesiones } from "./Profesiones/index.js";
+export { default as Profesiones_Usuarios } from "./Profiones_Usuarios/index.js";
 
 Usuarios.belongsToMany(Roles, {
   through: Usuario_Rol,
@@ -54,4 +58,13 @@ Fallos.belongsToMany(Empresas, {
   as: "EmpresasPorFallo",
   through: Fallo_x_Empresa,
   foreignKey: "idFallo",
+});
+
+Usuarios.belongsToMany(Profesiones, {
+  through: Profesiones_Usuarios,
+  foreignKey: "idUsuario",
+});
+Profesiones.belongsToMany(Usuarios, {
+  through: Profesiones_Usuarios,
+  foreignKey: "idProfesion",
 });

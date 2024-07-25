@@ -12,7 +12,7 @@ const Usuarios = sequelize.define(
     },
     matricula: {
       type: DataTypes.STRING(50),
-      allowNull: false,
+      allowNull: true,
     },
     nombre: {
       type: DataTypes.STRING,
@@ -49,6 +49,12 @@ const Usuarios = sequelize.define(
         isInt: true,
         len: [7, 8],
       },
+    },
+    domicilioElectronico: {
+      type: DataTypes.STRING(255),
+    },
+    telefono: {
+      type: DataTypes.STRING(15),
     },
   },
   {
