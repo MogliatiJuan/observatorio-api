@@ -7,15 +7,15 @@ import {
   veredictById,
   veredictsAllOrFiltered,
 } from "../../controllers/fallos/index.js";
-import { validateFile } from "../../middlewares/validateFile/index.js";
+import { adminMiddleware, validateFile } from "../../middlewares/index.js";
 
 const router = express.Router();
 
 router.get("/", veredictsAllOrFiltered);
 router.post("/", validateFile, createVeredict);
 router.get("/:id", veredictById);
-router.put("/:id", modifyVeredict);
-router.delete("/:id", deleteVeredict);
-router.post("/restore/:id", restoreVeredict);
+router.put("/:id", adminMiddleware, modifyVeredict); //modificar middleware para cuando se agregue los colaboradores, estos mismos puedan modificar su fallo subido
+router.delete("/:id", adminMiddleware, deleteVeredict);
+router.post("/restore/:id", adminMiddleware, restoreVeredict);
 
 export default router;

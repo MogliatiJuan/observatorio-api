@@ -7,10 +7,6 @@ const router = express.Router();
 
 router.use("/fallo", fallosRouter);
 router.use("/datos", datosRouter);
-router.use(
-  "/auth",
-  //middleware
-  auth
-);
+router.use("/auth", auth);
 
 export default router;

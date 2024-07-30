@@ -1,7 +1,7 @@
 import { errorHandler } from "../../constants/index.js";
 import verifySizeAndTypeFiles from "../../utils/files/index.js";
 
-export const validateFile = (req, res, next) => {
+const validateFile = (req, res, next) => {
   if (!req.files) {
     return res
       .status(errorHandler.VAL_ERROR_EMPTY_FILE.status)
@@ -59,3 +59,4 @@ export const validateFile = (req, res, next) => {
     return next();
   }
 };
+export default validateFile;
