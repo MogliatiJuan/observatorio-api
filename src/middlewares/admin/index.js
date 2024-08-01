@@ -6,9 +6,12 @@ const adminMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    return res
-      .status(401)
-      .json({ message: "Acceso no autorizado: Token faltante" });
+    return res.status(401).json({
+      status: 401,
+      code: "UNAUTHORIZED",
+      message: "Acceso no autorizado: Token faltante",
+      details: null,
+    });
   }
 
   try {
@@ -16,16 +19,22 @@ const adminMiddleware = (req, res, next) => {
     const { rol: roles } = decoded;
 
     if (!roles.some((role) => role.rol === constants.ADMIN)) {
-      return res
-        .status(403)
-        .json({ message: "Acceso prohibido: Rol no autorizado" });
+      return res.status(403).json({
+        status: 403,
+        code: "FORBIDDEN",
+        message: "Acceso prohibido: Rol no autorizado",
+        details: null,
+      });
     }
 
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json({ message: "Acceso no autorizado: Token inválido o expirado" });
+    return res.status(401).json({
+      status: 401,
+      code: "UNAUTHORIZED",
+      message: "Acceso no autorizado: Token inválido o expirado",
+      details: null,
+    });
   }
 };
 
